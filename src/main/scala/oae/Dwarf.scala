@@ -3,21 +3,20 @@ package oae
 
 import java.awt.Graphics2D
 import Images.dwarf
+import oae.physics.Motion
 
-case class Dwarf(accel:Coord, velocity:Coord, position:Coord) {
-  def accell(delta:Coord) = Dwarf(accel + delta, velocity, position)
+case class Dwarf(motion:Motion) {
 
-  def simulate(time:Double) = {
-//    val vel = velocity + (accel * time)
-//    val pos = position + (velocity * time)
-    val x = position.x
+  def accell(delta:Coord) = Dwarf(motion.accell(delta))
 
-    val vel = if(x > 800) Coord(-1, 0) else if (x < 0) Coord(1,0) else velocity
-    val pos = position + vel
-    Dwarf(accel, vel, pos)
+  def simulate() = {
+    Dwarf(motion.move())
   }
 
+  def x = motion.position.x
+  def y = motion.position.y
+
   def draw(g:Graphics2D) {
-    g.drawImage(dwarf, position.x.asInstanceOf[Int], position.y.asInstanceOf[Int], null)
+    g.drawImage(dwarf, x.asInstanceOf[Int], y.asInstanceOf[Int], null)
   }
 }

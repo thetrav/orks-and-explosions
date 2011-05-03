@@ -5,6 +5,12 @@ class OrksAndExplosionsProject(info: ProjectInfo) extends DefaultWebstartProject
   
 //  override def webstartSignConfiguration = Some(new SignConfiguration("mark", storePassword("fakepassword") :: Nil))
 
+  val specsVersion = crossScalaVersionString match {
+    case "2.8.0" => "1.6.5"
+    case _ => "1.6.6"
+  }
+  val specs = "org.scala-tools.testing" % ("specs_" + crossScalaVersionString) % specsVersion % "test"
+
   def jnlpXML(libraries: Seq[WebstartJarResource]) =
       <jnlp spec="1.0+" codebase="http://localhost/~thetrav/orks" href={artifactBaseName + ".jnlp"}>
         <information>
