@@ -8,7 +8,7 @@ import physics._
 import collection.immutable.List
 
 object Main {
-  val width = 800
+  val width = 1680
   val height = 600
 
   var gameRunning = true
@@ -52,8 +52,8 @@ object Main {
 
     new Thread() {
       override def run() {
-        var dwarf = Dwarf(Motion(Coord(0,0), Coord(0,0), Coord(0,0)))
-        var camera = Camera(Motion(Coord(0,0), Coord(0,0), Coord(0,0))).centerOn(dwarf.motion.position)
+        var dwarf = Dwarf(Motion(Coord(0,0), Coord(0,0), Coord(0,0), 0.85))
+        var camera = Camera(Motion(Coord(0,0), Coord(0,0), Coord(0,0), 0.95)).centerOn(dwarf.motion.position)
         var scene = Scene(initProps())
 
         var lastTime = System.currentTimeMillis()
@@ -76,8 +76,8 @@ object Main {
           while(timeCounter > simulationResolution) {
             timeCounter -= simulationResolution
             dwarf = dwarf.simulate()
-            camera = camera.centerOn(dwarf.motion.position)
-//            camera = camera.simulate(dwarf.motion)
+//            camera = camera.centerOn(dwarf.motion.position)
+            camera = camera.simulate(dwarf.motion)
           }
 
           val g = strategy.getDrawGraphics().asInstanceOf[Graphics2D]
@@ -106,8 +106,8 @@ object Main {
     List(
       Prop(Coord(0,-10), Images.grass),
       Prop(Coord(200,20), Images.grass),
-      Prop(Coord(100,-20), Images.grass),
-      Prop(Coord(-200,10), Images.grass),
+      Prop(Coord(3000,-20), Images.grass),
+      Prop(Coord(-2000,10), Images.grass),
       Prop(Coord(34,12), Images.flowers),
       Prop(Coord(900,12), Images.statue)
     )

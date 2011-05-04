@@ -37,5 +37,7 @@ case class Debug(pos:Coord, size:Coord, dwarf:Dwarf, camera:Camera) {
     drawMotion("Dwarf:", dwarf.motion, Coord(10,20))
 
     drawMotion("Camera:", camera.motion, Coord(10, 100))
+
+    g.drawString("centerX"+ (camera.x + Main.width/2), 15, 180)
   }
 }
