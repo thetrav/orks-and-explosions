@@ -52,7 +52,16 @@ object Main {
 
     new Thread() {
       override def run() {
-        var dwarf = Dwarf(Motion(Coord(0,0), Coord(0,0), Coord(0,0), 0.85))
+        var dwarf = Dwarf(
+          Motion(Coord(0,0),
+          Coord(0,0),
+          Coord(0,0), 0.85),
+          "walk-right",
+          Map(
+          "walk-left" -> Images.dragonWalkLeft,
+          "walk-right" -> Images.dragonWalkRight
+          )
+        )
         var camera = Camera(Motion(Coord(0,0), Coord(0,0), Coord(0,0), 0.95)).centerOn(dwarf.motion.position)
         var scene = Scene(initProps())
 
