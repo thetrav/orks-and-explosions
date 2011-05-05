@@ -20,7 +20,7 @@ case class Dwarf(motion:Motion, currentAnimation:String, animations:Map[String, 
     val newAnimation = if(velX < 0) "walk-left" else if (velX == 0) currentAnimation else "walk-right"
     val speed = if(velX < 0) velX * (-1) else velX
 
-    val newAnimations = animations + (newAnimation -> animations(newAnimation).update(speed*0.4))
+    val newAnimations = animations + (newAnimation -> animations(newAnimation).update(speed*0.2))
 
     Dwarf(
       newMotion,

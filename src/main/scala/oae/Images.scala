@@ -30,9 +30,9 @@ object Images {
 
   val dragonWalkSpeed = 10
   val dragonWalkRight = Animation(List(
-    Frame(img("dragon/walk1"), dragonWalkSpeed),
+    Frame(img("dragon/walk1"), dragonWalkSpeed*3),
     Frame(img("dragon/walk2"), dragonWalkSpeed),
-    Frame(img("dragon/walk3"), dragonWalkSpeed),
+    Frame(img("dragon/walk3"), dragonWalkSpeed*3),
     Frame(img("dragon/walk4"), dragonWalkSpeed)
   ), 0, 0)
   val dragonWalkLeft = flipAnimationX(dragonWalkRight)
