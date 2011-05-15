@@ -52,18 +52,8 @@ object Main {
 
     new Thread() {
       override def run() {
-        var dwarf = Dwarf(
-          Motion(Coord(0,0),
-          Coord(0,0),
-          Coord(0,0), 0.85),
-          "walk-right",
-          Map(
-          "walk-left" -> Images.dragonWalkLeft,
-          "walk-right" -> Images.dragonWalkRight
-          )
-        )
-        var camera = Camera(Motion(Coord(0,0), Coord(0,0), Coord(0,0), 0.95)).centerOn(dwarf.motion.position)
-        var scene = Scene(initProps())
+        Player.init()
+        Scene.initProps()
 
         var lastTime = System.currentTimeMillis()
         var timeCounter = 0L
@@ -74,32 +64,27 @@ object Main {
           timeCounter = timeCounter + (time - lastTime)
           lastTime = time
 
-
-          dwarf = dwarf.accell(if(input.contains(KeyEvent.VK_LEFT)) {
-              Coord(-1,0)
-            } else if (input.contains(KeyEvent.VK_RIGHT)) {
-              Coord(1,0)
-            } else Coord(0,0)
-          )
-
           while(timeCounter > simulationResolution) {
+            Debug.clear
             timeCounter -= simulationResolution
-            dwarf = dwarf.simulate()
-//            camera = camera.centerOn(dwarf.motion.position)
-            camera = camera.simulate(dwarf.motion)
+            Player.simulate()
+            Space.simulate()
+            Camera.centerOn(Player.coord)
           }
 
           val g = strategy.getDrawGraphics().asInstanceOf[Graphics2D]
           g.setColor(Color.black)
           g.fillRect(0, 0, width, height)
 
-          camera.transform(g)
+          Camera.transform(g)
 
-          scene.draw(g)
-          dwarf.draw(g)
+          Scene.draw(g)
+          Player.draw(g)
+          Space.draw(g)
 
-          camera.unTransform(g)
-          Debug(Coord(0,0), Coord(300,200), dwarf, camera).draw(g)
+          Camera.unTransform(g)
+          g.setColor(Color.green)
+          Debug.draw(g)
 
           g.dispose()
           strategy.show()
@@ -111,14 +96,5 @@ object Main {
     }.start()
   }
 
-  def initProps() = {
-    List(
-      Prop(Coord(0,-10), Images.grass),
-      Prop(Coord(200,20), Images.grass),
-      Prop(Coord(3000,-20), Images.grass),
-      Prop(Coord(-2000,10), Images.grass),
-      Prop(Coord(34,12), Images.flowers),
-      Prop(Coord(900,12), Images.statue)
-    )
-  }
+
 }

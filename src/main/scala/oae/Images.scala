@@ -28,13 +28,19 @@ object Images {
     }, src.currentFrame, src.timeCounter)
   }
 
-  val dragonWalkSpeed = 10
-  val dragonWalkRight = Animation(List(
-    Frame(img("dragon/walk1"), dragonWalkSpeed*3),
-    Frame(img("dragon/walk2"), dragonWalkSpeed),
-    Frame(img("dragon/walk3"), dragonWalkSpeed*3),
-    Frame(img("dragon/walk4"), dragonWalkSpeed)
+  val dwarfWalkSpeed = 10
+  val dwarfWalkRight = Animation(List(
+    Frame(img("dwarf/anim1"), dwarfWalkSpeed),
+    Frame(img("dwarf/anim2"), dwarfWalkSpeed),
+    Frame(img("dwarf/anim3"), dwarfWalkSpeed),
+    Frame(img("dwarf/anim4"), dwarfWalkSpeed),
+    Frame(img("dwarf/anim5"), dwarfWalkSpeed),
+    Frame(img("dwarf/anim6"), dwarfWalkSpeed),
+    Frame(img("dwarf/anim7"), dwarfWalkSpeed)
   ), 0, 0)
-  val dragonWalkLeft = flipAnimationX(dragonWalkRight)
+  val dwarfWalkLeft = flipAnimationX(dwarfWalkRight)
+  val dwarfStand = Animation(List(
+    Frame(img("dwarf/anim4"), dwarfWalkSpeed)
+  ), 0, 0)
 
 }
