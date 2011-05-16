@@ -23,7 +23,9 @@ case class Animation (frames:List[Frame], currentFrame:Int, timeCounter:Double) 
     Animation(frames, newIndex, newCounter)
   }
 
-  def draw(g:Graphics2D, c:Coord) {
-    g.drawImage(frame.image, null, c.x.asInstanceOf[Int], c.y.asInstanceOf[Int])
+  def draw(g:Graphics2D) {
+    g.drawImage(frame.image, null, 0, 0)
   }
+
+  def size = math.max(frame.image.getWidth, frame.image.getHeight)
 }

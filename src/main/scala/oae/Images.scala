@@ -37,4 +37,8 @@ object Images {
   ), 0, 0)
   val dragonWalkLeft = flipAnimationX(dragonWalkRight)
 
+  val dragonStand = Animation(List(
+    Frame(img("dragon/walk1"), 1)
+  ), 0, 0)
+
 }
