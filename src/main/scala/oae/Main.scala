@@ -36,6 +36,9 @@ object Main {
         if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
           gameRunning = false
         }
+        if(e.getKeyCode() == KeyEvent.VK_BACK_QUOTE) {
+          Debug.toggle()
+        }
       }
 
       override def keyReleased(e:KeyEvent) {

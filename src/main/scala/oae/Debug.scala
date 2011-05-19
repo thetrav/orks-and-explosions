@@ -9,6 +9,10 @@ object Debug {
 
   val height = 300
   var strings = List[String]()
+  var show = false
+  def toggle() {
+    show = !show
+  }
 
   def int(d:Double) = d.asInstanceOf[Int]
 
@@ -19,16 +23,18 @@ object Debug {
   }
 
   def draw(g:Graphics2D) {
-    g.setColor(new Color(0, 0, 0, 80))
-    g.fillRect(0, 0, Main.width, height)
-    g.setColor(Color.red)
-    g.drawRect(0, 0, Main.width, height)
-    g.setColor(Color.green)
+    if(show) {
+      g.setColor(new Color(0, 0, 0, 80))
+      g.fillRect(0, 0, Main.width, height)
+      g.setColor(Color.red)
+      g.drawRect(0, 0, Main.width, height)
+      g.setColor(Color.green)
 
-    var i = 0
-    for(s:String <- strings) {
-      g.drawString(s, 10, 10+i)
-      i+= 10
+      var i = 0
+      for(s:String <- strings) {
+        g.drawString(s, 10, 10+i)
+        i+= 10
+      }
     }
     clear
   }

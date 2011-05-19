@@ -22,7 +22,7 @@ object Player {
     id = Physics.addEntity(Coord(0,0), animations(currentAnimation).size.asInstanceOf[Double])
   }
 
-  val runSpeed = 0.5
+  val runSpeed = 1.0
 
   def simulate(input:Map[Int, Long]) {
     if(input.contains(KeyEvent.VK_RIGHT)) {
