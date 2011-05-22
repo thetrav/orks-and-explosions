@@ -22,7 +22,8 @@ object Player {
     id = Physics.addEntity(Coord(0,0), animations(currentAnimation).size.asInstanceOf[Double])
   }
 
-  val runSpeed = 1.0
+  val runSpeed = 0.9
+  val jumpPower = -30
   var jumpCounter = 0
   val jumpLimit = 60
 
@@ -38,7 +39,7 @@ object Player {
     }
 
     if(input.contains(KeyEvent.VK_SPACE) && jumpCounter > jumpLimit) {
-      Physics.addAccel(id, Coord(0, -10))
+      Physics.addAccel(id, Coord(0, jumpPower))
       jumpCounter = 0
     }
     jumpCounter += 1

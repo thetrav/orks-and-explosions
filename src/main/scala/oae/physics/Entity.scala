@@ -2,8 +2,8 @@ package oae.physics
 
 import oae._
 
-case class Entity(id:Int, pos:Coord, size:Double, accel:Coord = Coord(0,0), vel:Coord = Coord(0,0), friction:Double = 0.95) {
-  val gravity = Coord(0, 0.9)
+case class Entity(id:Int, pos:Coord, size:Double, accel:Coord = Coord(0,0), vel:Coord = Coord(0,0), friction:Double = 0.85) {
+  val gravity = Coord(0, 0.5)
   def move = {
     val newAccel = accel + gravity
     val newVel = (vel + newAccel) * friction
