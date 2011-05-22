@@ -8,14 +8,17 @@ import scala.collection.immutable.List
 
 
 object Physics {
+  val minimum = 0.000000001
   var id_counter = 0
   var entities = Map[Int, Entity]()
 
-  var world = List(Segment(Coord(3005,200), Coord(-3005,200), Coord(0,-1)),
+  var world = List(Segment(Coord(505,200), Coord(-505,200), Coord(0,-1)),
                    Segment(Coord(305,-20), Coord(-305,-20), Coord(0,1)),
-                   Segment(Coord(300,-25), Coord(300,205), Coord(0,-1)),
-                   Segment(Coord(-300,205), Coord(-300,-25), Coord(0,1))
+                   Segment(Coord(300,-25), Coord(300,205), Coord(-1,0)),
+                   Segment(Coord(-300,205), Coord(-300,-25), Coord(1,0))
   )
+
+  var collidedSegments = Map[Segment, Boolean]()
 
 
   def addEntity(pos:Coord, size:Double) = {
@@ -33,49 +36,77 @@ object Physics {
     entities += (id -> entities(id).addAccel(accel))
   }
 
-  def closestCollision(motion:Segment, surfaces:List[Segment]):Option[Contact] = {
-    val potentialCollisions = for(s <- surfaces) yield {
+  def allCollisions(motion:Segment, surfaces:List[Segment]) = {
+    val list = for(s <- surfaces) yield {
       if(motion.vector.dot(s.normal) < 0) {
         motion.intersect(s) match {
-          case Some(c) => Some((s, c.distance(motion.a), c))
+          case Some(c) => Some(Contact(motion, s, c))
           case None    => None
         }
       } else {
         None //not moving towards the surface, we don't care if it collided
       }
-  }.toList
-    if(potentialCollisions.flatten.isEmpty) {
+    }.toList
+    list.flatten
+  }
+
+  def closestCollision(motion:Segment, surfaces:List[Segment]) = {
+    val potentialCollisions = allCollisions(motion, surfaces)
+    if(potentialCollisions.isEmpty) {
       None
     } else {
-      val closest = potentialCollisions.flatten.reduceLeft {
+      val closest = potentialCollisions.reduceLeft {
         (collect, current) => {
-          if(current._2 < collect._2) current else collect
+          if(current.distance < collect.distance) current else collect
         }
       }
-      Some(Contact(motion, closest._1, closest._3))
+      Some(closest)
     }
   }
 
-  def handleCollisions(id:Int, lastFrame:Map[Int, Entity], currentFrame:Map[Int, Entity]) = {
-    val entity = currentFrame(id)
+  def flipVelocityAndSeparate(entity:Entity, contact:Contact) = {
+      val newPos = contact.intersect + contact.surface.normal
+
+      //rotate velocity
+      val angle = angleBetween(contact.surface, Segment(Coord(-1,0), Coord(1,0)))
+      val rotated = entity.vel.rotate(angle)
+      val flipped = rotated.copy(y = -1*rotated.y)
+      val newVelocity = flipped.rotate(-angle)
+
+      entity.copy(pos = newPos, vel = newVelocity)
+  }
+
+  def separate(entity:Entity, contact:Contact) = {
+      val newPos = contact.intersect + contact.surface.normal
+
+      entity.copy(pos = newPos)
+  }
+
+  def handleClosestCollisions(id:Int, lastFrame:Map[Int, Entity], projectedFrame:Map[Int, Entity]) = {
+    val entity = projectedFrame(id)
     val oldEntity = lastFrame(id)
     val motion = Segment(oldEntity.pos, entity.pos)
     //find the closest potential intersect
     closestCollision(motion, world) match {
       case None => entity
       case Some(contact) => {
-        Debug.out("contact:"+contact)
-        val newPos = contact.intersect + contact.surface.normal
-
-        //rotate velocity
-        val angle = angleBetween(contact.surface, Segment(Coord(-1,0), Coord(1,0)))
-        val rotated = entity.vel.rotate(angle)
-        val flipped = rotated.copy(y = -1*rotated.y)
-        val newVelocity = flipped.rotate(-angle)
-
-        entity.copy(pos = newPos, vel = newVelocity)
+        collidedSegments += (contact.surface -> true)
+        flipVelocityAndSeparate(entity, contact)
       }
     }
+  }
+
+  def handleRemainingCollisions(id:Int, lastFrame:Map[Int, Entity], projectedFrame:Map[Int, Entity]) = {
+    var entity = projectedFrame(id)
+    var motion = Segment(lastFrame(id).pos, entity.pos)
+    if(motion.size > minimum) {
+      val collisions = allCollisions(motion, world)
+      collisions.foreach((contact:Contact) => {
+        collidedSegments += (contact.surface -> true)
+        entity = separate(entity, contact)
+      })
+    }
+    entity
   }
 
   def angleBetween(a:Segment, b:Segment) = {
@@ -87,23 +118,34 @@ object Physics {
   }
 
   def simulate {
+    collidedSegments = Map[Segment, Boolean]()
+
     val newEntities = for(t:(Int, Entity) <- entities) yield {
       (t._1, t._2.move)
     }
     val shiftedEntities = for(t:(Int, Entity) <- entities) yield {
       val id = t._1
 
-      id -> handleCollisions(id, entities, newEntities)
+      id -> handleClosestCollisions(id, entities, newEntities)
+    }
+    val solvedPositions = for(t:(Int, Entity) <- entities) yield {
+      val id = t._1
+
+      id -> handleRemainingCollisions(id, entities, shiftedEntities)
     }
     entities = shiftedEntities
   }
 
   def int(d:Double) = d.asInstanceOf[Int]
   def draw(g:Graphics2D) {
-    g.setColor(Color.green)
     world.foreach((segment:Segment) => {
-      g.drawLine(int(segment.a.x), int(segment.a.y),
-                 int(segment.b.x), int(segment.b.y))
+        g.setColor(if(collidedSegments.contains(segment)) Color.red else Color.green)
+        g.drawLine(int(segment.a.x), int(segment.a.y),
+                   int(segment.b.x), int(segment.b.y))
+        g.setColor(Color.white)
+        val n = (segment.normal * 40) + segment.a
+        g.drawLine(int(segment.a.x), int(segment.a.y),
+                   int(n.x), int(n.y))
     })
 
     entities.foreach((tuple:(Int, Entity)) => {
