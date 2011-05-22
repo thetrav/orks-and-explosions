@@ -27,6 +27,22 @@ class TestMotion extends Specification {
       testSegments(floor, Segment(Coord(-1, 5), Coord(1,5)), 0)
     }
 
+    "correctly determine the closest collision" in {
+      val closest = Segment(Coord(-10,5), Coord(10, 5), Coord(0,-1))
+      val surfaces = List(
+        Segment(Coord(-10,0), Coord(10, 0), Coord(0,-1)),
+        closest,
+        Segment(Coord(-10,10), Coord(10, 10), Coord(0,-1)),
+        Segment(Coord(-10,15), Coord(10, 15), Coord(0,-1))
+      )
+      val motion = Segment(Coord(0, 3), Coord(0,12))
+
+      val contact = Physics.closestCollision(motion, surfaces)
+      (contact == None) mustBe false
+      contact.get.surface mustBe closest
+
+    }
+
     "allow the player to move along the surface of a line" in {
       println("posX,posY,accelX,accelY,velX,velY")
       val id = Physics.addEntity(Coord(0,150), 10)

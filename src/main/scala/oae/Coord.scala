@@ -21,4 +21,6 @@ case class Coord(x:Double, y:Double) {
     val newY = (x*sin) + (y*cos)
     Coord(newX, newY)
   }
+
+  def distance(c:Coord) = math.sqrt((x-c.x)*(x-c.x)+(y-c.y)*(y-c.y))
 }
