@@ -65,7 +65,7 @@ object Physics {
       case None => entity
       case Some(contact) => {
         Debug.out("contact:"+contact)
-        val newPos = contact.intersect - entity.vel.normalize
+        val newPos = contact.intersect + contact.surface.normal
 
         //rotate velocity
         val angle = angleBetween(contact.surface, Segment(Coord(-1,0), Coord(1,0)))
