@@ -12,10 +12,12 @@ object Physics {
   var id_counter = 0
   var entities = Map[Int, Entity]()
 
-  var world = List(Segment(Coord(505,200), Coord(-505,200), Coord(0,-1)),
-                   Segment(Coord(305,-20), Coord(-305,-20), Coord(0,1)),
-                   Segment(Coord(300,-25), Coord(300,205), Coord(-1,0)),
-                   Segment(Coord(-300,205), Coord(-300,-25), Coord(1,0))
+  var world = List(Segment(Coord(500,200), Coord(-500,200), Coord(0,-1)),
+                   Segment(Coord(500,-20), Coord(-500,-20), Coord(0,1)),
+                   Segment(Coord(500,-20), Coord(500,200), Coord(-1,0)),
+                   Segment(Coord(-500,200), Coord(-500,-20), Coord(1,0)),
+                   Segment(Coord(-500,150), Coord(-400,150), Coord(0,-1)),
+                   Segment(Coord(400,200), Coord(450,150), Coord(-1,-1).normalize)
   )
 
   var collidedSegments = Map[Segment, Boolean]()
