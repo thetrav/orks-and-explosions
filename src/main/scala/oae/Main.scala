@@ -69,11 +69,11 @@ object Main {
           lastTime = time
 
           while(timeCounter > simulationResolution) {
+            Debug.clear
             timeCounter -= simulationResolution
             Player.simulate(input)
             Physics.simulate
             camera.simulate
-            Debug.clear
           }
 
           val g = strategy.getDrawGraphics().asInstanceOf[Graphics2D]

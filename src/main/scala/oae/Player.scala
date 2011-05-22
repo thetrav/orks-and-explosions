@@ -23,6 +23,8 @@ object Player {
   }
 
   val runSpeed = 1.0
+  var jumpCounter = 0
+  val jumpLimit = 60
 
   def simulate(input:Map[Int, Long]) {
     if(input.contains(KeyEvent.VK_RIGHT)) {
@@ -34,6 +36,12 @@ object Player {
     } else {
       currentAnimation = "stand"
     }
+
+    if(input.contains(KeyEvent.VK_SPACE) && jumpCounter > jumpLimit) {
+      Physics.addAccel(id, Coord(0, -10))
+      jumpCounter = 0
+    }
+    jumpCounter += 1
 
     animations += currentAnimation -> animations(currentAnimation).update(math.abs(Physics.vel(id).x))
   }

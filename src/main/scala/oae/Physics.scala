@@ -11,7 +11,7 @@ object Physics {
   var id_counter = 0
   var entities = Map[Int, Entity]()
 
-  var world = List(Segment(Coord(305,200), Coord(-305,200), Coord(0,-1)),
+  var world = List(Segment(Coord(3005,200), Coord(-3005,200), Coord(0,-1)),
                    Segment(Coord(305,-20), Coord(-305,-20), Coord(0,1)),
                    Segment(Coord(300,-25), Coord(300,205), Coord(0,-1)),
                    Segment(Coord(-300,205), Coord(-300,-25), Coord(0,1))
@@ -64,6 +64,7 @@ object Physics {
     closestCollision(motion, world) match {
       case None => entity
       case Some(contact) => {
+        Debug.out("contact:"+contact)
         val newPos = contact.intersect - entity.vel.normalize
 
         //rotate velocity
@@ -107,7 +108,7 @@ object Physics {
 
     entities.foreach((tuple:(Int, Entity)) => {
       val e = tuple._2
-      g.draw(new Ellipse2D.Double(e.x, e.y, e.size, e.size))
+      g.draw(new Ellipse2D.Double(e.x, e.y, 1, 1))
     })
   }
 }
