@@ -11,10 +11,10 @@ object Physics {
   var id_counter = 0
   var entities = Map[Int, Entity]()
 
-  var world = List(Segment(Coord(105,200), Coord(-105,200), Coord(0,-1)),
-                   Segment(Coord(205,-20), Coord(-205,-20), Coord(0,-1)),
-                   Segment(Coord(200,-25), Coord(100,205), Coord(0,-1)),
-                   Segment(Coord(-100,205), Coord(-200,-25), Coord(0,-1))
+  var world = List(Segment(Coord(305,200), Coord(-305,200), Coord(0,-1)),
+                   Segment(Coord(305,-20), Coord(-305,-20), Coord(0,1)),
+                   Segment(Coord(300,-25), Coord(300,205), Coord(0,-1)),
+                   Segment(Coord(-300,205), Coord(-300,-25), Coord(0,1))
   )
 
 
