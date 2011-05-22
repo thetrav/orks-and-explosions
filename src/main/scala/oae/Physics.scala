@@ -37,7 +37,7 @@ object Physics {
     val potentialCollisions = for(s <- surfaces) yield {
       if(motion.vector.dot(s.normal) < 0) {
         motion.intersect(s) match {
-          case Some(c) => Some((s, c.distance(motion.a)))
+          case Some(c) => Some((s, c.distance(motion.a), c))
           case None    => None
         }
       } else {
@@ -47,12 +47,12 @@ object Physics {
     if(potentialCollisions.flatten.isEmpty) {
       None
     } else {
-      val surface = potentialCollisions.flatten.reduceLeft {
+      val closest = potentialCollisions.flatten.reduceLeft {
         (collect, current) => {
           if(current._2 < collect._2) current else collect
         }
-      }._1
-      Some(Contact(motion, surface))
+      }
+      Some(Contact(motion, closest._1, closest._3))
     }
   }
 
@@ -60,67 +60,21 @@ object Physics {
     val entity = currentFrame(id)
     val oldEntity = lastFrame(id)
     val motion = Segment(oldEntity.pos, entity.pos)
-    val lossOnImpact = 0.6
-
     //find the closest potential intersect
-    val contact = closestCollision(motion, world)
-    //work out the bounce velocity
+    closestCollision(motion, world) match {
+      case None => entity
+      case Some(contact) => {
+        val newPos = contact.intersect - entity.vel.normalize
 
+        //rotate velocity
+        val angle = angleBetween(contact.surface, Segment(Coord(-1,0), Coord(1,0)))
+        val rotated = entity.vel.rotate(angle)
+        val flipped = rotated.copy(y = -1*rotated.y)
+        val newVelocity = flipped.rotate(-angle)
 
-    //remove the motion after the bounce
-
-    val collisions = for (surface <- world) yield {
-      motion.intersect(surface) match {
-        case None => entity
-        case Some(c:Coord) => {
-          def perform(segment:Segment, motion:Segment, intersect:Coord) = {
-            //end pos = flip end coord.y
-            val endPos = Coord(motion.b.x, -1 * motion.b.y)
-            //newVel == motion.flip y
-            val motionVector = motion.vector
-            val newVel = motionVector.copy(y=motionVector.y * -1)
-  //          println("oldVel,"+motionVector+"\nnewVel,"+newVel)
-            (endPos, newVel)
-          }
-  
-          def performWithRotation(angle:Double, segment:Segment, motion:Segment, intersect:Coord) = {
-            val rotatedSegment = segment.rotate(angle)
-            val rotatedMotion = motion.rotate(angle)
-            val rotatedIntersect = intersect.rotate(angle)
-            val translation = Coord(0, -1 * rotatedIntersect.y)
-  
-            val tuple = perform(rotatedSegment   + translation,
-                                rotatedMotion    + translation,
-                                rotatedIntersect + translation)
-  //          println("tuple,"+tuple)
-            val unTranslated = (tuple._1 - translation, tuple._2)
-  //          println("untranslated"+unTranslated)
-            val unRotated = (unTranslated._1.rotate(-1 * angle), unTranslated._2.rotate(-1 * angle))
-  //          println("unrotated"+unRotated)
-            unRotated
-          }
-  
-          if(motion.vector.dot(surface.normal) < 0) { //ensures motion is towards the segment rather than away (stops double collisions)
-            val angleOfNormal = angleBetween(surface, Segment(Coord(-1,0), Coord(1,0)))
-  
-            val tuple = performWithRotation(angleOfNormal, surface, motion, c)
-            val newPos = tuple._1
-            val newVelocity = tuple._2
-  
-            entity.copy(pos = newPos, vel = newVelocity)
-          } else {
-            entity
-          }
-        }
+        entity.copy(pos = newPos, vel = newVelocity)
       }
     }
-
-    //taking the first collision is a really crap way of solving the Time Of Impact problem
-    collisions.find(_ != entity) match {
-      case None => entity
-      case Some(e) => e
-    }
-
   }
 
   def angleBetween(a:Segment, b:Segment) = {

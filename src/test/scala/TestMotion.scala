@@ -40,7 +40,18 @@ class TestMotion extends Specification {
       val contact = Physics.closestCollision(motion, surfaces)
       (contact == None) mustBe false
       contact.get.surface mustBe closest
+    }
 
+    "correctly detect collision" in {
+      var world = List(Segment(Coord(105,200), Coord(-105,200), Coord(0,-1)),
+                   Segment(Coord(205,-20), Coord(-205,-20), Coord(0,-1)),
+                   Segment(Coord(200,-25), Coord(100,205), Coord(0,-1)),
+                   Segment(Coord(-100,205), Coord(-200,-25), Coord(0,-1))
+      )
+      val motion = Segment(Coord(207.30465946760884,195.7442237877346),
+                           Coord(221.29777767275974,201.28054765086702),Coord(0.0,0.0))
+      val contact = Physics.closestCollision(motion, world)
+      contact.isDefined mustBe true
     }
 
     "allow the player to move along the surface of a line" in {
