@@ -12,6 +12,7 @@ object Main {
   val height = 600
 
   var gameRunning = true
+  var drawPhysics = false
 
   var input = Map[Int, Long]()
 
@@ -38,6 +39,9 @@ object Main {
         }
         if(e.getKeyCode() == KeyEvent.VK_BACK_QUOTE) {
           Debug.toggle()
+        }
+        if(e.getKeyCode() == KeyEvent.VK_P) {
+          drawPhysics = !drawPhysics
         }
       }
 
@@ -84,7 +88,7 @@ object Main {
 
           scene.draw(g)
           Player.draw(g)
-          Physics.draw(g)
+          if(drawPhysics) Physics.draw(g)
 
           camera.unTransform(g)
           Debug.draw(g)

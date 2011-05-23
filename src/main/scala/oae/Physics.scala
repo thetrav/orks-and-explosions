@@ -8,7 +8,7 @@ import scala.collection.immutable.List
 
 
 object Physics {
-  val minimum = 0.000000001
+  val minimum = 0.1
   var id_counter = 0
   var entities = Map[Int, Entity]()
 
@@ -67,7 +67,7 @@ object Physics {
   }
 
   def flipVelocityAndSeparate(entity:Entity, contact:Contact) = {
-      val newPos = contact.intersect + contact.surface.normal
+      val newPos = contact.intersect + (contact.surface.normal * minimum)
 
       //rotate velocity
       val angle = angleBetween(contact.surface, Segment(Coord(-1,0), Coord(1,0)))
@@ -79,7 +79,7 @@ object Physics {
   }
 
   def separate(entity:Entity, contact:Contact) = {
-      val newPos = contact.intersect + contact.surface.normal
+      val newPos = contact.intersect + (contact.surface.normal * minimum)
 
       entity.copy(pos = newPos)
   }
