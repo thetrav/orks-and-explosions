@@ -8,13 +8,15 @@ import physics._
 import collection.immutable.List
 
 object Main {
-  val width = 1680
+  val width = 1000
   val height = 600
 
   var gameRunning = true
   var drawPhysics = false
 
   var input = Map[Int, Long]()
+
+  val camera = CenterCam
 
   def main(args:Array[String]) {
     val frame = new JFrame("orks and explosions")
@@ -61,7 +63,6 @@ object Main {
     new Thread() {
       override def run {
         Player.init
-        val camera = CenterCam
         var scene = Scene(initProps)
 
         var lastTime = System.currentTimeMillis

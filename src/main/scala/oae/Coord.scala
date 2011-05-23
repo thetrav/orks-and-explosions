@@ -7,6 +7,8 @@ case class Coord(x:Double, y:Double) {
   def * (s:Double) = Coord(x*s, y*s)
   def / (s:Double) = this * (1/s)
 
+  def % (c:Coord) = Coord(x%c.x, y%c.y)
+
   def size() = math.sqrt(x*x + y*y)
 
   def dot(c:Coord) = x * c.x + y * c.y

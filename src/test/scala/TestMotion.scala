@@ -74,7 +74,7 @@ class TestMotion extends Specification {
       contact.isDefined mustBe true
     }
 
-    "allow the player to move along the surface of a line" in {
+    "produce an expected motion graph" in {
       println("posX,posY,accelX,accelY,velX,velY")
       val id = Physics.addEntity(Coord(0,150), 10)
       var counter = 50
@@ -86,7 +86,7 @@ class TestMotion extends Specification {
         Physics.simulate
         Physics.addAccel(id, Coord(1,0))
       }
-      0
+      true mustBe true
     }
   }
 }

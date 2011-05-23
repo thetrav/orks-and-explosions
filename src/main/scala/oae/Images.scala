@@ -10,10 +10,20 @@ import scala.collection.immutable.List
 object Images {
   def img(img:String) = ImageIO.read(getClass().getResourceAsStream(img+".png"))
 
+  def tile(image:String) = img(("tiles/"+image))
+
   val dwarf = img("dwarf")
   val grass = img("grassblarg")
   val flowers = img("flowers")
   val statue = img("statue")
+
+  val backgroundTile = tile("bg_tile")
+  val fgTiles = List(
+    tile("fg_tile_1"),
+    tile("fg_tile_2"),
+    tile("fg_tile_3"),
+    tile("fg_tile_4")
+  )
 
   def flipImageX(image:BufferedImage) = {
     val tx = AffineTransform.getScaleInstance(-1, 1);

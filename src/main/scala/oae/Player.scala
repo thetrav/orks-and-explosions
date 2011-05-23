@@ -2,7 +2,6 @@ package oae
 
 
 import java.awt.Graphics2D
-import Images.dwarf
 import java.awt.event.KeyEvent
 
 object Player {
