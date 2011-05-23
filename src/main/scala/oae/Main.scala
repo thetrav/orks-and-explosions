@@ -30,8 +30,7 @@ object Main {
     frame.getContentPane.add(canvas)
 
     canvas.setIgnoreRepaint(true)
-
-    frame.addKeyListener(new KeyAdapter{
+    val listener = new KeyAdapter{
       override def keyPressed(e:KeyEvent) {
         input += e.getKeyCode -> System.currentTimeMillis
         if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
@@ -49,7 +48,9 @@ object Main {
         input -= e.getKeyCode
       }
 
-    })
+    }
+    frame.addKeyListener(listener)
+    canvas.addKeyListener(listener)
 
     frame.setResizable(false)
     frame.setVisible(true)
