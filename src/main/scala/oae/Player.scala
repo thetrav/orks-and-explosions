@@ -7,9 +7,9 @@ import java.awt.event.KeyEvent
 object Player {
   var id = 0
   var animations = Map(
-    "walk-left" -> Images.dragonWalkLeft,
-    "walk-right" -> Images.dragonWalkRight,
-    "stand" -> Images.dragonStand
+    "walk-left" -> Images.dwarfWalkLeft,
+    "walk-right" -> Images.dwarfWalkRight,
+    "stand" -> Images.dwarfStand
   )
   var currentAnimation = "stand"
 
