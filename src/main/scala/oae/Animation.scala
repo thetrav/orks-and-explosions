@@ -31,5 +31,5 @@ case class Animation (frames:List[Frame], currentFrame:Int, timeCounter:Double) 
     g.drawImage(frame.image, null, 0, 0)
   }
 
-  def size = math.max(frame.image.getWidth, frame.image.getHeight)
+  def size = Coord(frame.image.getWidth, frame.image.getHeight)
 }

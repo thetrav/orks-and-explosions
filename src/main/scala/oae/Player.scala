@@ -18,7 +18,7 @@ object Player {
   def y = pos.y
 
   def init() {
-    id = Physics.addEntity(Coord(0,0), animations(currentAnimation).size.asInstanceOf[Double])
+    id = Physics.addEntity(Coord(0,0), animations(currentAnimation).size)
   }
 
   val runSpeed = 0.9

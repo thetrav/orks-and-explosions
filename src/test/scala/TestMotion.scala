@@ -35,48 +35,48 @@ class TestMotion extends Specification {
         Segment(Coord(-10,10), Coord(10, 10), Coord(0,-1)),
         Segment(Coord(-10,15), Coord(10, 15), Coord(0,-1))
       )
-      val motion = Segment(Coord(0, 3), Coord(0,12))
+      val motions = List(Segment(Coord(0, 3), Coord(0,12)))
 
-      val contact = Physics.closestCollision(motion, surfaces)
+      val contact = Physics.closestCollision(motions, surfaces)
       (contact == None) mustBe false
       contact.get.surface mustBe closest
     }
 
     "correctly detect collision on a horizontal plane moving down" in {
       var world = List(Segment(Coord(1005,200), Coord(-1005,200), Coord(0,-1)))
-      val motion = Segment(Coord(207.30465946760884,195.7442237877346),
-                           Coord(221.29777767275974,201.28054765086702))
+      val motion = List(Segment(Coord(207.30465946760884,195.7442237877346),
+                           Coord(221.29777767275974,201.28054765086702)))
       val contact = Physics.closestCollision(motion, world)
       contact.isDefined mustBe true
     }
 
     "correctly detect collision on a vertical plane moving left" in {
       var world = List(Segment(Coord(10,-10), Coord(10,10), Coord(1,0)))
-      val motion = Segment(Coord(15,0),
-                           Coord(5,0))
+      val motion = List(Segment(Coord(15,0),
+                           Coord(5,0)))
       val contact = Physics.closestCollision(motion, world)
       contact.isDefined mustBe true
     }
 
     "correctly ignore collision on a vertical plane moving with the normal" in {
       var world = List(Segment(Coord(10,-10), Coord(10,10), Coord(1,0)))
-      val motion = Segment(Coord(5,0),
-                           Coord(15,0))
+      val motion = List(Segment(Coord(5,0),
+                           Coord(15,0)))
       val contact = Physics.closestCollision(motion, world)
       contact.isDefined mustBe false
     }
 
     "correctly detect collision on an angled plane" in {
       var world = List(Segment(Coord(-10,-10), Coord(10,10), Coord(-1,1).normalize))
-      val motion = Segment(Coord(-5,5),
-                           Coord(5,-5))
+      val motion = List(Segment(Coord(-5,5),
+                           Coord(5,-5)))
       val contact = Physics.closestCollision(motion, world)
       contact.isDefined mustBe true
     }
 
     "produce an expected motion graph" in {
       println("posX,posY,accelX,accelY,velX,velY")
-      val id = Physics.addEntity(Coord(0,150), 10)
+      val id = Physics.addEntity(Coord(0,150), Coord(10,10))
       var counter = 50
       while(counter > 0) {
         counter -= 1

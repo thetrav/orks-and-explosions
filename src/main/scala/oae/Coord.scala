@@ -27,4 +27,6 @@ case class Coord(x:Double, y:Double) {
   def distance(c:Coord) = math.sqrt((x-c.x)*(x-c.x)+(y-c.y)*(y-c.y))
 
   def normalize = this / math.sqrt(x*x + y*y)
+
+  def offsetFrom(c:Coord) = this - c
 }

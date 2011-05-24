@@ -30,7 +30,7 @@ object Physics {
   var collidedSegments = Map[Segment, Boolean]()
 
 
-  def addEntity(pos:Coord, size:Double) = {
+  def addEntity(pos:Coord, size:Coord) = {
     id_counter += 1
     val id = id_counter
     entities += (id -> Entity(id, pos, size))
@@ -45,8 +45,8 @@ object Physics {
     entities += (id -> entities(id).addAccel(accel))
   }
 
-  def allCollisions(motion:Segment, surfaces:List[Segment]) = {
-    val list = for(s <- surfaces) yield {
+  def allCollisions(motions:List[Segment], surfaces:List[Segment]) = {
+    val list = for(motion <- motions; s <- surfaces) yield {
       if(motion.vector.dot(s.normal) < 0) {
         motion.intersect(s) match {
           case Some(c) => Some(Contact(motion, s, c))
@@ -59,8 +59,8 @@ object Physics {
     list.flatten
   }
 
-  def closestCollision(motion:Segment, surfaces:List[Segment]) = {
-    val potentialCollisions = allCollisions(motion, surfaces)
+  def closestCollision(motions:List[Segment], surfaces:List[Segment]) = {
+    val potentialCollisions = allCollisions(motions, surfaces)
     if(potentialCollisions.isEmpty) {
       None
     } else {
@@ -74,27 +74,35 @@ object Physics {
   }
 
   def flipVelocityAndSeparate(entity:Entity, contact:Contact) = {
-      val newPos = contact.intersect + (contact.surface.normal * minimum)
-
       //rotate velocity
       val angle = angleBetween(contact.surface, Segment(Coord(-1,0), Coord(1,0)))
       val rotated = entity.vel.rotate(angle)
       val flipped = rotated.copy(y = -1*rotated.y)
       val newVelocity = flipped.rotate(-angle)
 
-      entity.copy(pos = newPos, vel = newVelocity)
+      separate(entity.copy(vel = newVelocity), contact)
   }
 
   def separate(entity:Entity, contact:Contact) = {
-      val newPos = contact.intersect + (contact.surface.normal * minimum)
+      val newPos = contact.intersect + (contact.surface.normal * minimum) +  entity.pos.offsetFrom(contact.motion.b)
 
       entity.copy(pos = newPos)
+  }
+  
+  def buildMotions(lastFrame:Entity, projectedFrame:Entity) = {
+    List(
+      Segment(lastFrame.topLeft, projectedFrame.topLeft),
+      Segment(lastFrame.topRight, projectedFrame.topRight),
+      Segment(lastFrame.bottomRight, projectedFrame.bottomRight),
+      Segment(lastFrame.bottomLeft, projectedFrame.bottomLeft)
+    )
   }
 
   def handleClosestCollisions(id:Int, lastFrame:Map[Int, Entity], projectedFrame:Map[Int, Entity]) = {
     val entity = projectedFrame(id)
     val oldEntity = lastFrame(id)
-    val motion = Segment(oldEntity.pos, entity.pos)
+    val motion = buildMotions(oldEntity, entity)
+
     //find the closest potential intersect
     closestCollision(motion, world) match {
       case None => entity
@@ -107,9 +115,9 @@ object Physics {
 
   def handleRemainingCollisions(id:Int, lastFrame:Map[Int, Entity], projectedFrame:Map[Int, Entity]) = {
     var entity = projectedFrame(id)
-    var motion = Segment(lastFrame(id).pos, entity.pos)
-    if(motion.size > minimum) {
-      val collisions = allCollisions(motion, world)
+    var motions = buildMotions(lastFrame(id), entity)
+    if(motions.head.size > minimum) {
+      val collisions = allCollisions(motions, world)
       collisions.foreach((contact:Contact) => {
         collidedSegments += (contact.surface -> true)
         entity = separate(entity, contact)
@@ -159,7 +167,11 @@ object Physics {
 
     entities.foreach((tuple:(Int, Entity)) => {
       val e = tuple._2
-      g.draw(new Ellipse2D.Double(e.x, e.y, 1, 1))
+      val drawDot = (c:Coord) => {g.draw(new Ellipse2D.Double(c.x, c.y, 2, 2))}
+      drawDot(e.topLeft)
+      drawDot(e.topRight)
+      drawDot(e.bottomRight)
+      drawDot(e.bottomLeft)
     })
   }
 }
