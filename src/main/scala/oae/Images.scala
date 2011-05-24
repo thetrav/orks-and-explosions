@@ -48,17 +48,23 @@ object Images {
   
   val dwarfWalkSpeed = 10
   val dwarfWalkRight = Animation(List(
-    Frame(img("dwarf/0"), dwarfWalkSpeed*3),
-    Frame(img("dwarf/1"), dwarfWalkSpeed),
+    Frame(img("dwarf/1"), dwarfWalkSpeed*3),
     Frame(img("dwarf/2"), dwarfWalkSpeed),
     Frame(img("dwarf/3"), dwarfWalkSpeed),
-    Frame(img("dwarf/4"), dwarfWalkSpeed*3),
-    Frame(img("dwarf/5"), dwarfWalkSpeed)
+    Frame(img("dwarf/4"), dwarfWalkSpeed),
+    Frame(img("dwarf/5"), dwarfWalkSpeed),
+    Frame(img("dwarf/6"), dwarfWalkSpeed),
+    Frame(img("dwarf/7"), dwarfWalkSpeed*3),
+    Frame(img("dwarf/6"), dwarfWalkSpeed),
+    Frame(img("dwarf/5"), dwarfWalkSpeed),
+    Frame(img("dwarf/4"), dwarfWalkSpeed),
+    Frame(img("dwarf/3"), dwarfWalkSpeed),
+    Frame(img("dwarf/2"), dwarfWalkSpeed)
   ), 0, 0)
   val dwarfWalkLeft = flipAnimationX(dwarfWalkRight)
 
   val dwarfStand = Animation(List(
-    Frame(img("dwarf/5"), 1)
+    Frame(img("dwarf/4"), 1)
   ), 0, 0)
 
   val dragonWalkSpeed = 10
