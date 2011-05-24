@@ -48,9 +48,6 @@ object Images {
   
   val dwarfWalkSpeed = 10
   val dwarfWalkRight = Animation(List(
-    Frame(img("dwarf/1"), dwarfWalkSpeed*3),
-    Frame(img("dwarf/2"), dwarfWalkSpeed),
-    Frame(img("dwarf/3"), dwarfWalkSpeed),
     Frame(img("dwarf/4"), dwarfWalkSpeed),
     Frame(img("dwarf/5"), dwarfWalkSpeed),
     Frame(img("dwarf/6"), dwarfWalkSpeed),
@@ -59,7 +56,10 @@ object Images {
     Frame(img("dwarf/5"), dwarfWalkSpeed),
     Frame(img("dwarf/4"), dwarfWalkSpeed),
     Frame(img("dwarf/3"), dwarfWalkSpeed),
-    Frame(img("dwarf/2"), dwarfWalkSpeed)
+    Frame(img("dwarf/2"), dwarfWalkSpeed),
+    Frame(img("dwarf/1"), dwarfWalkSpeed*3),
+    Frame(img("dwarf/2"), dwarfWalkSpeed),
+    Frame(img("dwarf/3"), dwarfWalkSpeed)
   ), 0, 0)
   val dwarfWalkLeft = flipAnimationX(dwarfWalkRight)
 

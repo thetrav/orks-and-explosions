@@ -34,7 +34,7 @@ object Player {
       Physics.addAccel(id, Coord(-runSpeed,0))
       currentAnimation = "walk-left"
     } else {
-      currentAnimation = "stand"
+      animations += currentAnimation -> animations(currentAnimation).reset()
     }
 
     if(input.contains(KeyEvent.VK_SPACE) && jumpCounter > jumpLimit) {

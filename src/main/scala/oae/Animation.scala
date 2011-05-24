@@ -8,6 +8,10 @@ case class Frame(image:BufferedImage, time:Int)
 case class Animation (frames:List[Frame], currentFrame:Int, timeCounter:Double) {
   def frame = frames(currentFrame)
 
+  def reset() = {
+    this.copy(currentFrame = 0, timeCounter = 0)
+  }
+
   def update(animationSpeed:Double) = {
     val time = timeCounter + (1.0*animationSpeed)
 
