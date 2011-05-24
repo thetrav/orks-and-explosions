@@ -3,12 +3,17 @@ package oae
 import scala.collection.immutable.List
 import java.awt._
 import java.awt.geom._
+import physics._
 
 case class Scene(props:List[Prop]) {
-  val bg = Images.backgroundTile
-  val backgroundPaint = new TexturePaint(bg, new Rectangle(0,0, bg.getWidth, bg.getHeight))
+
+  val default = Images.fgTiles.head
+  val defaultPaint = new TexturePaint(default, new Rectangle(0,0, default.getWidth, default.getHeight))
 
   val backgroundRectangle = new Rectangle(0,0,Main.width*3,Main.height*3)
+
+  val background= Images.backgroundTile
+  val backgroundPaint = new TexturePaint(background, new Rectangle(0,0, background.getWidth, background.getHeight))
 
   def draw(g:Graphics2D) {
     val playerPos = Physics.pos(Player.id)
@@ -19,10 +24,19 @@ case class Scene(props:List[Prop]) {
     Debug.out("offset:"+offset)
     Main.camera.unTransform(g)
     g.translate(-offset.x, -offset.y)
-    g.setPaint(backgroundPaint)
+    g.setPaint(defaultPaint)
     g.fill(backgroundRectangle)
     g.translate(offset.x, offset.y)
     Main.camera.transform(g)
+
+    val dugWorld = new Path2D.Double
+    dugWorld.moveTo(Physics.world.head.a.x, Physics.world.head.a.y)
+    Physics.world.foreach((surface:Segment) => {
+      dugWorld.lineTo(surface.b.x, surface.b.y)
+    })
+
+    g.setPaint(backgroundPaint)
+    g.fill(dugWorld)
 
     props.foreach(_.draw(g))
   }

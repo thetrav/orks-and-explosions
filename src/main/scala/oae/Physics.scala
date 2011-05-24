@@ -11,17 +11,19 @@ object Physics {
   val minimum = 0.1
   var id_counter = 0
   var entities = Map[Int, Entity]()
+  def buildWorld = {
+    val right = 2000
+    val left = -200
 
-  val rightWall = 20000
-  val leftWall = -2000
+    List(
+      Segment(Coord(left,200), Coord(left,-20), Coord(1,0)),
+      Segment(Coord(left,-20), Coord(right,-20), Coord(0,1)),
+      Segment(Coord(right,-20), Coord(right,200), Coord(-1,0)),
+      Segment(Coord(right,200), Coord(left,200), Coord(0,-1))
+    )
+  }
 
-  var world = List(Segment(Coord(rightWall,200), Coord(leftWall,200), Coord(0,-1)),
-                   Segment(Coord(rightWall,-20), Coord(leftWall,-20), Coord(0,1)),
-                   Segment(Coord(rightWall,-20), Coord(rightWall,200), Coord(-1,0)),
-                   Segment(Coord(leftWall,200), Coord(leftWall,-20), Coord(1,0)),
-                   Segment(Coord(-500,150), Coord(-400,150), Coord(0,-1)),
-                   Segment(Coord(400,200), Coord(450,150), Coord(-1,-1).normalize)
-  )
+  val world = buildWorld
 
   var collidedSegments = Map[Segment, Boolean]()
 
