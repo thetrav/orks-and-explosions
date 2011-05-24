@@ -107,12 +107,20 @@ object Main {
 
   def initProps = {
     List(
-      Prop(Coord(0,-10), Images.grass),
-      Prop(Coord(200,20), Images.grass),
-      Prop(Coord(3000,-20), Images.grass),
-      Prop(Coord(-2000,10), Images.grass),
-      Prop(Coord(34,12), Images.flowers),
-      Prop(Coord(900,12), Images.statue)
+      Prop(Coord(0,178), Images.decals(0)),
+      Prop(Coord(200,178), Images.decals(0)),
+      Prop(Coord(140,178), Images.decals(0)),
+      Prop(Coord(1000,178), Images.decals(0)),
+      Prop(Coord(1543,178), Images.decals(0)),
+
+      Prop(Coord(-100,175), Images.decals(1)),
+
+
+      Prop(Coord(800,175), Images.decals(2)),
+      Prop(Coord(850,165), Images.decals(3)),
+      Prop(Coord(900,175), Images.decals(4)),
+      Prop(Coord(777,175), Images.decals(6)),
+      Prop(Coord(1312,175), Images.decals(5))
     )
   }
 }

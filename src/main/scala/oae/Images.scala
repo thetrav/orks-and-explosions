@@ -11,11 +11,9 @@ object Images {
   def img(img:String) = ImageIO.read(getClass().getResourceAsStream(img+".png"))
 
   def tile(image:String) = img(("tiles/"+image))
+  def decal(image:String) = img(("decals/"+image))
 
   val dwarf = img("dwarf")
-  val grass = img("grassblarg")
-  val flowers = img("flowers")
-  val statue = img("statue")
 
   val backgroundTile = tile("bg_tile")
   val fgTiles = List(
@@ -23,6 +21,16 @@ object Images {
     tile("fg_tile_2"),
     tile("fg_tile_3"),
     tile("fg_tile_4")
+  )
+
+  val decals = List(
+    decal("decal_1"),
+    decal("decal_2"),
+    decal("decal_3"),
+    decal("decal_4"),
+    decal("decal_5"),
+    decal("decal_6"),
+    decal("decal_7")
   )
 
   def flipImageX(image:BufferedImage) = {
