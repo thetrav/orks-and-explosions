@@ -13,13 +13,15 @@ object Physics {
   var entities = Map[Int, Entity]()
   def buildWorld = {
     val right = 2000
-    val left = -200
+    val left = -189
+    val top = -35
+    val bottom = 190
 
     List(
-      Segment(Coord(left,200), Coord(left,-20), Coord(1,0)),
-      Segment(Coord(left,-20), Coord(right,-20), Coord(0,1)),
-      Segment(Coord(right,-20), Coord(right,200), Coord(-1,0)),
-      Segment(Coord(right,200), Coord(left,200), Coord(0,-1))
+      Segment(Coord(left,bottom), Coord(left,top), Coord(1,0)),
+      Segment(Coord(left,top), Coord(right,top), Coord(0,1)),
+      Segment(Coord(right,top), Coord(right,bottom), Coord(-1,0)),
+      Segment(Coord(right,bottom), Coord(left,bottom), Coord(0,-1))
     )
   }
 
