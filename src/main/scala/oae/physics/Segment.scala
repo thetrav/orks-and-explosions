@@ -2,7 +2,10 @@ package oae.physics
 
 import oae._
 
-case class Segment(a:Coord, b:Coord, normal:Coord = Coord(0,0)) {
+case class Segment(a:Coord, b:Coord) {
+
+  def normal = Coord(0,-1)//TODO: calculate normal
+
   def intersect(other:Segment) = {
     val x1 = a.x
     val y1 = a.y
@@ -25,14 +28,6 @@ case class Segment(a:Coord, b:Coord, normal:Coord = Coord(0,0)) {
       if((unknownA < 1 && unknownA > 0) && (unknownB < 1 && unknownB > 0)) {
         val x = x1 + unknownA * (x2 - x1)
         val y = y1 + unknownA * (y2 - y1)
-//        println("collision\n\tmovement:"+this
-//          +"\n\tfloor:"+other
-//          +"\n\tdenominator:"+denominator
-//          +"\n\tnumeratorA:"+numeratorA
-//          +"\n\tnumeratorB:"+numeratorB
-//          +"\n\tunknownA:"+unknownA
-//          +"\n\tunknownB:"+unknownB
-//          +"\n\tintersect:"+Coord(x,y))
         Some(Coord(x,y))
       } else{
         None
@@ -46,7 +41,7 @@ case class Segment(a:Coord, b:Coord, normal:Coord = Coord(0,0)) {
     math.sqrt(((a.x - b.x) * (a.x - b.x)) + ((a.y - b.y) * (a.y - b.y)))
   }
 
-  def rotate(angle:Double) = Segment(a.rotate(angle), b.rotate(angle), normal.rotate(angle))
-  def + (c:Coord) = Segment(a + c, b + c, normal + c)
-  def - (c:Coord) = Segment(a - c, b - c, normal - c)
+  def rotate(angle:Double) = Segment(a.rotate(angle), b.rotate(angle))
+  def + (c:Coord) = Segment(a + c, b + c)
+  def - (c:Coord) = Segment(a - c, b - c)
 }

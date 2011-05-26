@@ -3,8 +3,11 @@ package oae
 
 import java.awt.Graphics2D
 import java.awt.event.KeyEvent
+import java.awt.Color
 
 object Player {
+  var mousePos = Coord(0,0)
+
   var id = 0
   var animations = Map(
     "walk-left" -> Images.dwarfWalkLeft,
@@ -26,7 +29,7 @@ object Player {
   var jumpCounter = 0
   val jumpLimit = 60
 
-  def simulate(input:Map[Int, Long]) {
+  def simulate(input:Map[Int, Long], mouseWorldPos:Coord) {
     if(input.contains(KeyEvent.VK_RIGHT)) {
       Physics.addAccel(id, Coord(runSpeed,0))
       currentAnimation = "walk-right"
@@ -44,11 +47,17 @@ object Player {
     jumpCounter += 1
 
     animations += currentAnimation -> animations(currentAnimation).update(math.abs(Physics.vel(id).x))
+
+    mousePos = mouseWorldPos
   }
 
   def draw(g:Graphics2D) {
     g.translate(x, y)
     animations(currentAnimation).draw(g)
     g.translate(-x, -y)
+
+    g.setColor(new Color(255,0,0,100))
+
+
   }
 }

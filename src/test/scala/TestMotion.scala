@@ -1,7 +1,7 @@
 
 import oae._
 import oae.physics._
-import Math.Pi
+import math.Pi
 
 import org.specs.Specification
 

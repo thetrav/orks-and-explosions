@@ -5,8 +5,6 @@ import java.awt._
 import java.awt.geom._
 import scala.collection.immutable.List
 
-
-
 object Physics {
   val minimum = 0.1
   var id_counter = 0
@@ -17,12 +15,12 @@ object Physics {
     val top = -35
     val bottom = 190
 
-    List(
-      Segment(Coord(left,bottom), Coord(left,top), Coord(1,0)),
-      Segment(Coord(left,top), Coord(right,top), Coord(0,1)),
-      Segment(Coord(right,top), Coord(right,bottom), Coord(-1,0)),
-      Segment(Coord(right,bottom), Coord(left,bottom), Coord(0,-1))
-    )
+    Shape(List(
+      Coord(left,bottom),
+      Coord(left,top),
+      Coord(right,top),
+      Coord(right,bottom)
+    ))
   }
 
   val world = buildWorld
@@ -104,7 +102,7 @@ object Physics {
     val motion = buildMotions(oldEntity, entity)
 
     //find the closest potential intersect
-    closestCollision(motion, world) match {
+    closestCollision(motion, world.segments) match {
       case None => entity
       case Some(contact) => {
         collidedSegments += (contact.surface -> true)
@@ -117,7 +115,7 @@ object Physics {
     var entity = projectedFrame(id)
     var motions = buildMotions(lastFrame(id), entity)
     if(motions.head.size > minimum) {
-      val collisions = allCollisions(motions, world)
+      val collisions = allCollisions(motions, world.segments)
       collisions.foreach((contact:Contact) => {
         collidedSegments += (contact.surface -> true)
         entity = separate(entity, contact)
@@ -155,7 +153,7 @@ object Physics {
 
   def int(d:Double) = d.asInstanceOf[Int]
   def draw(g:Graphics2D) {
-    world.foreach((segment:Segment) => {
+    world.segments.foreach((segment:Segment) => {
         g.setColor(if(collidedSegments.contains(segment)) Color.red else Color.green)
         g.drawLine(int(segment.a.x), int(segment.a.y),
                    int(segment.b.x), int(segment.b.y))

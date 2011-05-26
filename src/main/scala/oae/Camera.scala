@@ -19,8 +19,8 @@ trait Camera {
 }
 
 case object CenterCam extends Camera {
-  def x = Player.x - Main.width/2
-  def y = Player.y - Main.height/2
+  def x = Player.x - Game.width/2
+  def y = Player.y - Game.height/2
   def pos = Player.pos
 
   def simulate {

@@ -10,33 +10,27 @@ case class Scene(props:List[Prop]) {
   val default = Images.fgTiles.head
   val defaultPaint = new TexturePaint(default, new Rectangle(0,0, default.getWidth, default.getHeight))
 
-  val backgroundRectangle = new Rectangle(0,0,Main.width*3,Main.height*3)
+  val backgroundRectangle = new Rectangle(0,0,Game.width*3,Game.height*3)
 
   val background= Images.backgroundTile
   val backgroundPaint = new TexturePaint(background, new Rectangle(0,0, background.getWidth, background.getHeight))
 
   def draw(g:Graphics2D) {
     val playerPos = Physics.pos(Player.id)
-    val screenSize = Coord(Main.width, Main.height)
+    val screenSize = Coord(Game.width, Game.height)
     val offset = (playerPos % (screenSize)) + (screenSize)
     Debug.out("playerPos:"+playerPos)
     Debug.out("screenSize:"+screenSize)
     Debug.out("offset:"+offset)
-    Main.camera.unTransform(g)
+    Game.camera.unTransform(g)
     g.translate(-offset.x, -offset.y)
     g.setPaint(defaultPaint)
     g.fill(backgroundRectangle)
     g.translate(offset.x, offset.y)
-    Main.camera.transform(g)
-
-    val dugWorld = new Path2D.Double
-    dugWorld.moveTo(Physics.world.head.a.x, Physics.world.head.a.y)
-    Physics.world.foreach((surface:Segment) => {
-      dugWorld.lineTo(surface.b.x, surface.b.y)
-    })
+    Game.camera.transform(g)
 
     g.setPaint(backgroundPaint)
-    g.fill(dugWorld)
+    g.fill(Physics.world.shape)
 
     props.foreach(_.draw(g))
   }
