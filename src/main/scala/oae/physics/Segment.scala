@@ -4,7 +4,7 @@ import oae._
 
 case class Segment(a:Coord, b:Coord) {
 
-  def normal = Coord(0,-1)//TODO: calculate normal
+  def normal = Coord(-1*(b.y-a.y), b.x-a.x).normalize
 
   def intersect(other:Segment) = {
     val x1 = a.x
