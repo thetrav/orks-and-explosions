@@ -52,6 +52,17 @@ object Animator {
     val frameTime = new JTextField(5)
     controls.add(frameTime)
 
+    val previewButton = new JButton("Preview")
+    controls.add(previewButton)
+    previewButton.addActionListener(new ActionListener{
+      override def actionPerformed(e:ActionEvent) {
+//        val size = frames.head._1.size
+//        val previewFrame = new JFrame(size, size);
+//        preview
+
+      }
+    })
+
     val refresh = () => {
       refreshing = true
       frameSelect.removeAllItems
