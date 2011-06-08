@@ -4,7 +4,9 @@ package oae
 
 object Main {
   def main(args:Array[String]) {
-    Game.run
+//    tmp.ShapeDrawer.go
+//    tools.Animator.go
+    Game.go
   }
 
 }

@@ -19,7 +19,7 @@ object Game {
 
   val camera = CenterCam
 
-  def run {
+  def go {
     val frame = new JFrame("orks and explosions")
     frame.setSize(width, height)
     frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE)
