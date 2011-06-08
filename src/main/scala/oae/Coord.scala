@@ -12,6 +12,7 @@ case class Coord(x:Double, y:Double) {
   def size() = math.sqrt(x*x + y*y)
 
   def dot(c:Coord) = x * c.x + y * c.y
+  def cross(c:Coord) = (x*c.y) - (y*c.x)
 
   def rotate(angle:Double) = {
     val cos = math.cos(angle)
