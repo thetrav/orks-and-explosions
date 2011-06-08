@@ -6,6 +6,18 @@ case class Segment(a:Coord, b:Coord) {
 
   def normal = Coord(-1*(b.y-a.y), b.x-a.x).normalize
 
+  def facingSameDirection(other:Segment) = {
+    val vA = b - a
+    val vB = other.b - other.a
+    val sameX = (vA.x < 0 && vB.x < 0) || (vA.x > 0 && vB.x > 0)
+    val sameY = (vA.y < 0 && vB.y < 0) || (vA.y > 0 && vB.y > 0)
+    if(sameX && sameY) {
+      true
+    } else {
+      (vA.x == 0 && sameY) || (vB.x == 0 && sameY) || (vA.y == 0 && sameX) || (vB.y == 0 && sameX)
+    }
+  }
+
   def intersect(other:Segment) = {
     val x1 = a.x
     val y1 = a.y
