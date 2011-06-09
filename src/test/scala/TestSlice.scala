@@ -7,25 +7,25 @@ import org.specs.Specification
 class TestSlice extends Specification {
   "SingleSlice" should {
     "keep first segment of a slice going against the normal" in {
-      val segment = Segment(Coord(0.5,-1), Coord(0.5, 1))
-      val surface = Segment(Coord(0,0), Coord(1,0))
+      val segment = Segment(Coord(1,-1), Coord(1, 1))
+      val surface = Segment(Coord(0,0), Coord(3,0))
 
-      val contact = Contact(segment, surface, Coord(0.5, 0))
+      val contact = Contact(segment, surface, Coord(1, 0))
 
       val slice = Shape.singleSlice(segment, contact)
 
-      slice must be equalTo(Segment(Coord(0.5, -1), Coord(0.5, 0)))
+      slice must be equalTo(Segment(Coord(1, -1), Coord(1, 0)))
     }
 
     "keep second segment of a slice going with the normal" in {
-      val segment = Segment(Coord(0.5, 1), Coord(0.5,-1))
-      val surface = Segment(Coord(0,0), Coord(1,0))
+      val segment = Segment(Coord(1, 1), Coord(1,-1))
+      val surface = Segment(Coord(0,0), Coord(3,0))
 
-      val contact = Contact(segment, surface, Coord(0.5, 0))
+      val contact = Contact(segment, surface, Coord(1, 0))
 
       val slice = Shape.singleSlice(segment, contact)
 
-      slice must be equalTo(Segment(Coord(0.5, 0), Coord(0.5, -1)))
+      slice must be equalTo(Segment(Coord(1, 0), Coord(1, -1)))
     }
   }
 
@@ -50,7 +50,7 @@ class TestSlice extends Specification {
     }
   }
 
-  "Build Poly" should {
+  "assembleShape" should {
     "assemble polygon from points" in {
       val segmentStarts = Map(
         Coord(10.0, 10.0)  -> Segment(Coord(10.0, 10.0), Coord(210.0,10.0)),
@@ -73,17 +73,10 @@ class TestSlice extends Specification {
         Coord(210,210),
         Coord(10,210)
       )))
-    }
 
-    "handle the imprecision of doubles" {
-      val segmentStarts =  Map(
-        Coord(2000.0,190.0) -> Segment(Coord(2000.0,190.0),Coord(-32.413984707935015,190.0)),
-        Coord(-189.0,190.0) -> Segment(Coord(-189.0,190.0),Coord(-189.0,-35.0)),
-        Coord(-32.41398470793504,190.0) -> Segment(Coord(-32.41398470793504,190.0), Coord(-132.09903550619336,209.93701015965166)),
-        Coord(2000.0,-35.0) -> Segment(Coord(2000.0,-35.0),Coord(2000.0,190.0)),
-        Coord(-132.09903550619356,190.0) -> Segment(Coord(-132.09903550619356,190.0),Coord(-189.0,190.0)),
-        Coord(-189.0,-35.0) -> Segment(Coord(-189.0,-35.0),Coord(2000.0,-35.0)),
-        Coord(-132.09903550619336,209.93701015965166) -> Segment(Coord(-132.09903550619336,209.93701015965166),Coord(-132.09903550619336,190.0)))
+
+
+
     }
   }
 }

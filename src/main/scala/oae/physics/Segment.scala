@@ -47,9 +47,9 @@ case class Segment(a:Coord, b:Coord) {
     }
   }
 
-  def vector() = b - a
+  def vector = b - a
 
-  def size() = {
+  def size = {
     math.sqrt(((a.x - b.x) * (a.x - b.x)) + ((a.y - b.y) * (a.y - b.y)))
   }
 

@@ -12,9 +12,9 @@ object Shape {
   def singleSlice(segment:Segment, contact:Contact) = {
     val otherSeg = contact.surface
     if(segment.facingSameDirection(Segment(Coord(0,0),otherSeg.normal))) {
-      Segment(segment.a, contact.intersect)
+      Segment(segment.a.round, contact.intersect.round)
     } else {
-      Segment(contact.intersect, segment.b)
+      Segment(contact.intersect.round, segment.b.round)
     }
   }
 
@@ -23,19 +23,19 @@ object Shape {
     if(hits.size == 1) {
       val contact = hits.head
       val keeper = singleSlice(seg, contact)
-      segmentStarts += (keeper.a.round -> keeper)
+      segmentStarts += (keeper.a -> keeper)
     } else if (hits.size == 2) {
       val contact = hits.head
       val otherSeg = contact.surface
       if(seg.facingSameDirection(Segment(Coord(0,0), otherSeg.normal))) {
-        segmentStarts += (seg.a.round -> Segment(seg.a, contact.intersect))
+        segmentStarts += (seg.a -> Segment(seg.a.round, contact.intersect.round))
         val secondContact = hits(1)
-        val secondStart = secondContact.intersect
-        segmentStarts += (secondStart.round -> Segment(secondStart, seg.b))
+        val secondStart = secondContact.intersect.round
+        segmentStarts += (secondStart -> Segment(secondStart, seg.b))
       } else {
-        val a = hits(0).intersect
-        val b = hits(1).intersect
-        segmentStarts += (a -> Segment(a, b))
+        val a = hits(0).intersect.round
+        val b = hits(1).intersect.round
+        segmentStarts += (a.round -> Segment(a, b))
       }
     } else {
       println("wtf, more than two?  You crazy players you broke shit! I HOPE YOU'RE HAPPY!")
@@ -71,7 +71,10 @@ object Shape {
     }
   }
 
-  def assembleShape(segmentStarts:Map[Coord, Segment]) = {
+  def assembleShape(starts:Map[Coord, Segment]) = {
+    val segmentStarts = starts.filter((keyVal:(Coord, Segment)) => {
+      math.abs(keyVal._2.size) > 0
+    })
     println("starts:"+segmentStarts)
     val startSegment = segmentStarts.head._2
     var pointList = List(startSegment.a)
