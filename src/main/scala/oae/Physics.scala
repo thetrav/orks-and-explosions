@@ -23,7 +23,7 @@ object Physics {
     ))
   }
 
-  val world = buildWorld
+  var world = buildWorld
 
   var collidedSegments = Map[Segment, Boolean]()
 
@@ -174,15 +174,6 @@ object Physics {
   }
 
   def dig(hole:Shape) {
-    //both polygons will have inside facing normals, use this to decide which side of the world segment is getting chopped off
-    //there will only ever be 0 or 1 intersect between a given segment of the hole and a given segment of the world
-    //there will only ever be 0 1 or 2 intersections between a given segment of the world and all segments in the dig hole
-    // world surfaces with 0 intersections are unaffected
-    // world surfaces with 1 intersection are cut short
-    // world surfaces with 2 intersections are split into 2 with a portion discarded
-    //for each segment in hole
-      //for each segment in world
-
-
+    world = world.merge(hole)
   }
 }

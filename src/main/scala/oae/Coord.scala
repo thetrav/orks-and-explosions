@@ -30,4 +30,6 @@ case class Coord(x:Double, y:Double) {
   def normalize = this / math.sqrt(x*x + y*y)
 
   def offsetFrom(c:Coord) = this - c
+
+  def round = Coord(math.round(x), math.round(y))
 }

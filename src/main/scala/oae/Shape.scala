@@ -21,28 +21,25 @@ object Shape {
   def slice(seg:Segment, other:Shape, hits:List[Contact], starts:Map[Coord, Segment]) = {
     var segmentStarts = starts
     if(hits.size == 1) {
-      println("single intersect")
       val contact = hits.head
       val keeper = singleSlice(seg, contact)
-      segmentStarts += (keeper.a -> keeper)
+      segmentStarts += (keeper.a.round -> keeper)
     } else if (hits.size == 2) {
-      println("two intersects")
       val contact = hits.head
       val otherSeg = contact.surface
       if(seg.facingSameDirection(Segment(Coord(0,0), otherSeg.normal))) {
-        println("keeping outer slices")
-        segmentStarts += (seg.a -> Segment(seg.a, contact.intersect))
+        segmentStarts += (seg.a.round -> Segment(seg.a, contact.intersect))
         val secondContact = hits(1)
         val secondStart = secondContact.intersect
-        segmentStarts += (secondStart -> Segment(secondStart, seg.b))
+        segmentStarts += (secondStart.round -> Segment(secondStart, seg.b))
       } else {
-        println("keeping inner slice")
         val a = hits(0).intersect
         val b = hits(1).intersect
         segmentStarts += (a -> Segment(a, b))
       }
     } else {
       println("wtf, more than two?  You crazy players you broke shit! I HOPE YOU'RE HAPPY!")
+      throw new RuntimeException
     }
     segmentStarts
   }
@@ -50,9 +47,8 @@ object Shape {
   def process(a:Shape, b:Shape, starts:Map[Coord, Segment]) = {
     var segmentStarts = starts
     a.segments.foreach((seg:Segment) => {
-      println("examining" + seg)
       segmentState(seg, b) match {
-        case InnerSegment(_) => println("dropping")
+        case InnerSegment(_) => None
         case OuterSegment(_) => segmentStarts += (seg.a -> seg)
         case SliceSegment(_, hits) => segmentStarts = slice(seg, b, hits, segmentStarts)
       }
@@ -76,12 +72,13 @@ object Shape {
   }
 
   def assembleShape(segmentStarts:Map[Coord, Segment]) = {
+    println("starts:"+segmentStarts)
     val startSegment = segmentStarts.head._2
     var pointList = List(startSegment.a)
-    var nextSegment = segmentStarts(startSegment.b)
+    var nextSegment = segmentStarts(startSegment.b.round)
     while(!nextSegment.equals(startSegment)) {
       pointList = nextSegment.a :: pointList
-      nextSegment = segmentStarts(nextSegment.b)
+      nextSegment = segmentStarts(nextSegment.b.round)
     }
     Shape(pointList.reverse)
   }
@@ -113,12 +110,21 @@ case class Shape(points:List[Coord]) {
   }
 
   def merge(other:Shape) = {
-    var segmentStarts = Map[Coord, Segment]()
+    try {
+      var segmentStarts = Map[Coord, Segment]()
 
-    segmentStarts = Shape.process(this, other, segmentStarts)
-    segmentStarts = Shape.process(other, this, segmentStarts)
+      segmentStarts = Shape.process(this, other, segmentStarts)
+      segmentStarts = Shape.process(other, this, segmentStarts)
 
-    Shape.assembleShape(segmentStarts)
+      Shape.assembleShape(segmentStarts)
+    } catch {
+      case e => {
+        e.printStackTrace
+        println("dig failed\nworld:"+this+"\ndigHole:"+other)
+        this
+      }
+    }
+
   }
 
 

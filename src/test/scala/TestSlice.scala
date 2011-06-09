@@ -74,5 +74,16 @@ class TestSlice extends Specification {
         Coord(10,210)
       )))
     }
+
+    "handle the imprecision of doubles" {
+      val segmentStarts =  Map(
+        Coord(2000.0,190.0) -> Segment(Coord(2000.0,190.0),Coord(-32.413984707935015,190.0)),
+        Coord(-189.0,190.0) -> Segment(Coord(-189.0,190.0),Coord(-189.0,-35.0)),
+        Coord(-32.41398470793504,190.0) -> Segment(Coord(-32.41398470793504,190.0), Coord(-132.09903550619336,209.93701015965166)),
+        Coord(2000.0,-35.0) -> Segment(Coord(2000.0,-35.0),Coord(2000.0,190.0)),
+        Coord(-132.09903550619356,190.0) -> Segment(Coord(-132.09903550619356,190.0),Coord(-189.0,190.0)),
+        Coord(-189.0,-35.0) -> Segment(Coord(-189.0,-35.0),Coord(2000.0,-35.0)),
+        Coord(-132.09903550619336,209.93701015965166) -> Segment(Coord(-132.09903550619336,209.93701015965166),Coord(-132.09903550619336,190.0)))
+    }
   }
 }
