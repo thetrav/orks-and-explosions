@@ -49,4 +49,30 @@ class TestSlice extends Specification {
       Shape.segmentState(seg, world) must be equalTo(SliceSegment(seg, List(expectedContact)))
     }
   }
+
+  "Build Poly" should {
+    "assemble polygon from points" in {
+      val segmentStarts = Map(
+        Coord(10.0, 10.0)  -> Segment(Coord(10.0, 10.0), Coord(210.0,10.0)),
+        Coord(210.0,100.0) -> Segment(Coord(210.0,100.0),Coord(220.0,100.0)),
+        Coord(210.0,110.0) -> Segment(Coord(210.0,110.0),Coord(210.0,210.0)),
+        Coord(210.0,210.0) -> Segment(Coord(210.0,210.0),Coord(10.0, 210.0)),
+        Coord(220.0,100.0) -> Segment(Coord(220.0,100.0),Coord(220.0,120.0)),
+        Coord(220.0,120.0) -> Segment(Coord(220.0,120.0),Coord(210.0,110.0)),
+        Coord(210.0,10.0)  -> Segment(Coord(210.0,10.0), Coord(210.0,100.0)),
+        Coord(10.0, 210.0) -> Segment(Coord(10.0, 210.0),Coord(10.0, 10.0)))
+      val assembled = Shape.assembleShape(segmentStarts)
+
+      assembled must be equalTo(Shape(List(
+        Coord(10,10),
+        Coord(210,10),
+        Coord(210,100),
+        Coord(220,100),
+        Coord(220,120),
+        Coord(210,110),
+        Coord(210,210),
+        Coord(10,210)
+      )))
+    }
+  }
 }

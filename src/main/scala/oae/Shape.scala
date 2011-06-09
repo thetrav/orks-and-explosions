@@ -30,13 +30,13 @@ object Shape {
       val contact = hits.head
       val otherSeg = contact.surface
       if(seg.facingSameDirection(Segment(Coord(0,0), otherSeg.normal))) {
-        //keep outer slices
+        println("keeping outer slices")
         segmentStarts += (seg.a -> Segment(seg.a, contact.intersect))
         val secondContact = hits(1)
         val secondStart = secondContact.intersect
         segmentStarts += (secondStart -> Segment(secondStart, seg.b))
       } else {
-       //keep inner slice
+        println("keeping inner slice")
         val a = hits(0).intersect
         val b = hits(1).intersect
         segmentStarts += (a -> Segment(a, b))
@@ -74,6 +74,17 @@ object Shape {
       SliceSegment(seg, hits)
     }
   }
+
+  def assembleShape(segmentStarts:Map[Coord, Segment]) = {
+    val startSegment = segmentStarts.head._2
+    var pointList = List(startSegment.a)
+    var nextSegment = segmentStarts(startSegment.b)
+    while(!nextSegment.equals(startSegment)) {
+      pointList = nextSegment.a :: pointList
+      nextSegment = segmentStarts(nextSegment.b)
+    }
+    Shape(pointList.reverse)
+  }
 }
 
 case class Shape(points:List[Coord]) {
@@ -107,16 +118,7 @@ case class Shape(points:List[Coord]) {
     segmentStarts = Shape.process(this, other, segmentStarts)
     segmentStarts = Shape.process(other, this, segmentStarts)
 
-    println("segmentStarts:"+segmentStarts)
-
-    val startSegment = segmentStarts.head._2
-    var pointList = List(startSegment.a)
-    var nextSegment = segmentStarts(startSegment.b)
-    while(nextSegment != startSegment) {
-      nextSegment.a :: pointList
-      nextSegment = segmentStarts(nextSegment.b)
-    }
-    Shape(pointList.reverse)
+    Shape.assembleShape(segmentStarts)
   }
 
 
