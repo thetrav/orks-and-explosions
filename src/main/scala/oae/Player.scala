@@ -24,13 +24,14 @@ object Player {
   def width = Physics.size(id).x
 
   def init() {
-    id = Physics.addEntity(Coord(0,0), animations(currentAnimation).size)
+    id = Physics.addEntity(Coord(30,80), animations(currentAnimation).size)
   }
 
   val runSpeed = 0.9
   val jumpPower = -30
   var jumpCounter = 0
   val jumpLimit = 60
+  var digDown = false
 
   def simulate(input:Map[Int, Long], mouseWorldPos:Coord) {
     if(input.contains(KeyEvent.VK_RIGHT)) {
@@ -50,7 +51,12 @@ object Player {
     jumpCounter += 1
 
     if(input.contains(KeyEvent.VK_D)) {
-      Physics.dig(digPoint)
+      digDown = true
+    } else {
+      if (digDown) {
+        Physics.dig(digPoint)
+      }
+      digDown = false
     }
 
     animations += currentAnimation -> animations(currentAnimation).update(math.abs(Physics.vel(id).x))
@@ -60,9 +66,9 @@ object Player {
 
   def digPoint = {
     if(currentAnimation == "walk-right") {
-      Coord(x + width + gridSize - (x % gridSize), y + gridSize - (y % gridSize))
+      Coord(x + width + gridSize - (x % gridSize), y + 2*gridSize - (y % gridSize))
     } else {
-      Coord(x - gridSize - (x % gridSize), y + gridSize - (y % gridSize))
+      Coord(x - gridSize - (x % gridSize), y + 2*gridSize - (y % gridSize))
     }
   }
 

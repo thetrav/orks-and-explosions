@@ -3,6 +3,7 @@ package oae
 import physics._
 import Game.gridSize
 import java.awt.geom._
+import java.lang.Math
 
 case class Shape(points:List[Coord]) {
 
@@ -69,11 +70,11 @@ case class Chunk(grid:Map[Coord, Boolean], centerPos:Coord, clockwise:Boolean) {
       checkPoint(topLeft, List[Coord](top, left, shoulders(0))),
       checkPoint(top, List(topLeft, shoulders(0), center, shoulders(1), topRight)),
       checkPoint(topRight, List[Coord](top, right, shoulders(1))),
-      checkPoint(left, List[Coord](topLeft, shoulders(0), center, shoulders(2), bottomLeft)),
       checkPoint(right, List[Coord](bottomRight, shoulders(3), center, shoulders(1), topRight)),
-      checkPoint(bottomLeft, List[Coord](left, shoulders(2), bottom)),
+      checkPoint(bottomRight, List[Coord](bottom, shoulders(3), right)),
       checkPoint(bottom, List[Coord](bottomLeft, shoulders(2), center, shoulders(3), bottomRight)),
-      checkPoint(bottomRight, List[Coord](bottom, shoulders(3), right))
+      checkPoint(bottomLeft, List[Coord](left, shoulders(2), bottom)),
+      checkPoint(left, List[Coord](topLeft, shoulders(0), center, shoulders(2), bottomLeft))
     ).flatten
   }
 
@@ -96,6 +97,7 @@ case class Chunk(grid:Map[Coord, Boolean], centerPos:Coord, clockwise:Boolean) {
     path.moveTo(points.head.x, points.head.y)
     points.tail.foreach((p:Coord) => {path.lineTo(p.x, p.y)})
     path.lineTo(points.head.x, points.head.y)
+    path.closePath()
     path
   }
 
@@ -150,8 +152,9 @@ case class Chunk(grid:Map[Coord, Boolean], centerPos:Coord, clockwise:Boolean) {
       val c = Array(0.0, 0.0)
 
       segType = it.currentSegment(c)
-//      println("segtype = "+segType)
-      path = Coord(c(0), c(1)) :: path
+      if(segType == PathIterator.SEG_LINETO) {
+        path = Coord(c(0), c(1)) :: path
+      }
       it.next()
     }
 
@@ -174,20 +177,27 @@ case class Chunk(grid:Map[Coord, Boolean], centerPos:Coord, clockwise:Boolean) {
     segments.find(isPointOnLine(c, _))
   }
 
-  val EPSILON = 0.1f;
+  val EPSILON = 0.01f;
 
   def isPointOnLine(point:Coord, segment:Segment) = {
+    def compare(a:Double, b:Double) = {
+      Math.max(a,b) - Math.min(a,b) < EPSILON
+    }
 //    println("isPointOnLine:"+point+" "+segment)
     val a = segment.a
     val b = segment.b
-    if (a.x == b.x && a.x == point.x) {
-      (point.y < a.y && point.y > b.y) || (point.y < b.y && point.y > a.y)
-    } else if (a.y == b.y && a.y == point.y) {
-      (point.x < a.x && point.x > b.x) || (point.x < b.x && point.x > a.x)
+    if (compare(a.x,b.x)) {
+      compare(a.x, point.x) && point.y > Math.min(a.y, b.y) && point.y < Math.max(a.y, b.y)
+    } else if (compare(a.y, b.y)) {
+      compare(a.y,point.y) && point.x > Math.min(a.x, b.x) && point.x < Math.max(a.x, b.x)
     } else {
       val aa = (b.y - a.y) / (b.x - a.x)
       val bb = a.y - aa * a.x
-      math.abs(point.y - (aa*point.x+bb)) < EPSILON
+      val dist = math.abs(point.y - (aa*point.x+bb))
+      if(dist < EPSILON) {
+        println(""+point +" "+segment + " dist:"+dist + " epsilon:"+EPSILON)
+      }
+      dist < EPSILON
     }
   }
 

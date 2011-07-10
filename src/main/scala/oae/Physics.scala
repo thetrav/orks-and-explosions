@@ -10,10 +10,10 @@ object Physics {
   var id_counter = 0
   var entities = Map[Int, Entity]()
   def buildWorld = {
-    val right = 1980
-    val left = -180
-    val top = -30
-    val bottom = 180
+    val right = 600
+    val left = 0
+    val top = 0
+    val bottom = 300
 
     Shape(List(
       Coord(left,bottom),
@@ -23,7 +23,7 @@ object Physics {
     ))
   }
 
-  val world = buildWorld
+  var world = buildWorld
 
   var collidedSegments = Map[Segment, Boolean]()
 
@@ -175,6 +175,6 @@ object Physics {
   }
 
   def dig(digPoint:Coord) {
-//    world = world.dig(digPoint)
+    world = world.dig(digPoint)
   }
 }

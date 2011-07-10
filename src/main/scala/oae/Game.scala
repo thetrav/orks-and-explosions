@@ -8,7 +8,7 @@ import physics._
 import collection.immutable.List
 
 object Game {
-  val width = 1800
+  val width = 900
   val height = 600
   val gridSize = 30
 

@@ -9,8 +9,8 @@ object Main {
 
 
   def main(args:Array[String]) {
-//    Game.run
-    DigBox.run
+    Game.run
+//    DigBox.run
 
   }
 
