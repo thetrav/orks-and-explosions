@@ -5,6 +5,8 @@ import java.awt.Graphics2D
 import java.awt.event.KeyEvent
 import java.awt.Color
 
+import Game.gridSize
+
 object Player {
   var mousePos = Coord(0,0)
 
@@ -19,6 +21,7 @@ object Player {
   def pos = Physics.pos(id)
   def x = pos.x
   def y = pos.y
+  def width = Physics.size(id).x
 
   def init() {
     id = Physics.addEntity(Coord(0,0), animations(currentAnimation).size)
@@ -46,9 +49,21 @@ object Player {
     }
     jumpCounter += 1
 
+    if(input.contains(KeyEvent.VK_D)) {
+      Physics.dig(digPoint)
+    }
+
     animations += currentAnimation -> animations(currentAnimation).update(math.abs(Physics.vel(id).x))
 
     mousePos = mouseWorldPos
+  }
+
+  def digPoint = {
+    if(currentAnimation == "walk-right") {
+      Coord(x + width + gridSize - (x % gridSize), y + gridSize - (y % gridSize))
+    } else {
+      Coord(x - gridSize - (x % gridSize), y + gridSize - (y % gridSize))
+    }
   }
 
   def draw(g:Graphics2D) {
@@ -56,7 +71,11 @@ object Player {
     animations(currentAnimation).draw(g)
     g.translate(-x, -y)
 
-    g.setColor(new Color(255,0,0,100))
+    g.setColor(Color.red)
+    val dp = digPoint
+    val ox = dp.x.asInstanceOf[Int] - 1
+    val oy = dp.y.asInstanceOf[Int] - 1
+    g.fillOval(ox, oy, 3, 3)
 
 
   }

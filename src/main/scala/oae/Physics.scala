@@ -10,10 +10,10 @@ object Physics {
   var id_counter = 0
   var entities = Map[Int, Entity]()
   def buildWorld = {
-    val right = 2000
-    val left = -189
-    val top = -35
-    val bottom = 190
+    val right = 1980
+    val left = -180
+    val top = -30
+    val bottom = 180
 
     Shape(List(
       Coord(left,bottom),
@@ -38,6 +38,7 @@ object Physics {
   def pos(id:Int)   = entities(id).pos
   def vel(id:Int)   = entities(id).vel
   def accel(id:Int) = entities(id).accel
+  def size(id:Int) = entities(id).size
 
   def addAccel(id:Int, accel:Coord) {
     entities += (id -> entities(id).addAccel(accel))
@@ -171,5 +172,9 @@ object Physics {
       drawDot(e.bottomRight)
       drawDot(e.bottomLeft)
     })
+  }
+
+  def dig(digPoint:Coord) {
+//    world = world.dig(digPoint)
   }
 }
