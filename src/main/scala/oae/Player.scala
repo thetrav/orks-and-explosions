@@ -65,11 +65,13 @@ object Player {
   }
 
   def digPoint = {
-    if(currentAnimation == "walk-right") {
-      Coord(x + width + gridSize - (x % gridSize), y + 2*gridSize - (y % gridSize))
+    val dy = y + gridSize - (y % gridSize)
+    val dx = if(currentAnimation == "walk-right") {
+      x + width + gridSize - (x % gridSize)
     } else {
-      Coord(x - gridSize - (x % gridSize), y + 2*gridSize - (y % gridSize))
+      x - gridSize - (x % gridSize)
     }
+    Coord(dx,dy)
   }
 
   def draw(g:Graphics2D) {

@@ -39,11 +39,21 @@ case class Chunk(grid:Map[Coord, Boolean], centerPos:Coord, clockwise:Boolean) {
       f(bottomLeft) + " " + f(bottom) + " " + f(bottomRight))
   }
 
+  def checkShoulders = {
+    this(grid +
+      (shoulders(0) -> (grid(left) && grid(top))) +
+      (shoulders(1) -> (grid(top) && grid(right))) +
+      (shoulders(3) -> (grid(right) && grid(bottom))) +
+      (shoulders(2) -> (grid(bottom) && grid(left)))
+    )
+  }
+
   def applyDig = {
+    println("center:"+centerPos)
     print("before ")
     printGrid
     if (grid(centerPos)) {
-      this(grid + (centerPos -> false))
+      this(grid + (centerPos -> false)).checkShoulders
     } else {
       val c = shoulders.find(grid(_)).get
       this(grid + (c -> false))
@@ -61,12 +71,23 @@ case class Chunk(grid:Map[Coord, Boolean], centerPos:Coord, clockwise:Boolean) {
   def bottomRight = centerPos + Coord(gridSize, gridSize)
 
 
+  def printPoints(l: List[Option[Coord]]) {
+    def p(o:Option[Coord]) = o match {
+      case Some(_)=>"x" case None => "o"
+    }
+
+    println("points:")
+    println(p(l(0))+" "+p(l(1))+" " + p(l(2)) + "\n"+
+            p(l(7))  + "   "   + p(l(3)) +"\n"+
+            p(l(6))+" "+p(l(5))+" "+p(l(4)) )
+  }
+
   def points = {
     print("after")
     printGrid
     //create list of points describing surface
     //TODO: determine if there are any ordering problems here
-    List[Option[Coord]](
+    val pointsList = List[Option[Coord]](
       checkPoint(topLeft, List[Coord](top, left, shoulders(0))),
       checkPoint(top, List(topLeft, shoulders(0), center, shoulders(1), topRight)),
       checkPoint(topRight, List[Coord](top, right, shoulders(1))),
@@ -74,13 +95,16 @@ case class Chunk(grid:Map[Coord, Boolean], centerPos:Coord, clockwise:Boolean) {
       checkPoint(bottomRight, List[Coord](bottom, shoulders(3), right)),
       checkPoint(bottom, List[Coord](bottomLeft, shoulders(2), center, shoulders(3), bottomRight)),
       checkPoint(bottomLeft, List[Coord](left, shoulders(2), bottom)),
-      checkPoint(left, List[Coord](topLeft, shoulders(0), center, shoulders(2), bottomLeft))
-    ).flatten
+      checkPoint(left, List[Coord](topLeft, shoulders(0), center, shoulders(2), bottomLeft)),
+      Some(center)
+    )
+    printPoints(pointsList)
+    pointsList.flatten
   }
 
   def checkPoint(c: Coord, neighbors: List[Coord]) = {
     if(grid(c) && neighbors.exists(!grid(_))) {
-      Some(c)
+      Some(Coord(Math.round(c.x), Math.round(c.y)))
     } else {
       None
     }
@@ -126,7 +150,9 @@ case class Chunk(grid:Map[Coord, Boolean], centerPos:Coord, clockwise:Boolean) {
     }
 
     val testPoints = List(digPoint, digPoint + Coord(0, -gridSize), digPoint + Coord(0, gridSize))
+    println("testPoints="+testPoints)
     val centerPoint = testPoints.find(tryChunk)
+    println("foundPoint = "+centerPoint)
     centerPoint match {
       case None => this
       case Some(c) => {
@@ -154,6 +180,8 @@ case class Chunk(grid:Map[Coord, Boolean], centerPos:Coord, clockwise:Boolean) {
       segType = it.currentSegment(c)
       if(segType == PathIterator.SEG_LINETO) {
         path = Coord(c(0), c(1)) :: path
+      } else {
+        println(" code:"+segType + " at " + c(0)+","+c(1))
       }
       it.next()
     }
@@ -186,10 +214,15 @@ case class Chunk(grid:Map[Coord, Boolean], centerPos:Coord, clockwise:Boolean) {
 //    println("isPointOnLine:"+point+" "+segment)
     val a = segment.a
     val b = segment.b
-    if (compare(a.x,b.x)) {
-      compare(a.x, point.x) && point.y > Math.min(a.y, b.y) && point.y < Math.max(a.y, b.y)
+
+    val xInRange = point.x >= Math.min(a.x, b.x) && point.x <= Math.max(a.x, b.x)
+    val yInRange = point.y >= Math.min(a.y, b.y) && point.y <= Math.max(a.y, b.y)
+    if (!xInRange || !yInRange) {
+      false
+    } else if (compare(a.x,b.x)) {
+      compare(a.x, point.x)
     } else if (compare(a.y, b.y)) {
-      compare(a.y,point.y) && point.x > Math.min(a.x, b.x) && point.x < Math.max(a.x, b.x)
+      compare(a.y,point.y)
     } else {
       val aa = (b.y - a.y) / (b.x - a.x)
       val bb = a.y - aa * a.x

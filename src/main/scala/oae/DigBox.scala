@@ -21,6 +21,9 @@ object DigBox {
 //     val area2 = new Area(new Rectangle2D.Double(70, 70, 100, 20))
 //     val merged = new Area(new Rectangle2D.Double(30,30,100,100))
 //     merged.add(area2)
+     val shape1 = Shape(List(Coord(600.0,0.0), Coord(600.0,300.0), Coord(390.0,300.0), Coord(360.0,330.0), Coord(330.0,300.0), Coord(0.0,300.0), Coord(0.0,0.0)))
+     val shape2 = Shape(List(Coord(420.0,300.0), Coord(390.0,330.0), Coord(360.0,330.0)))
+
 
      var shape = Shape(List(
        Coord(left,bottom),
@@ -38,17 +41,19 @@ object DigBox {
          g.fillRect(0,0,800,600)
 
          g.setColor(Color.red)
-         g.draw(shape.shape)
+         g.fill(shape1.shape)
+         g.setColor(Color.orange)
+         g.fill(shape2.shape)
 
          g.setColor(Color.blue)
-         shape.points.foreach(c => {
+         shape1.points.foreach(c => {
            g.fillOval(c.x.asInstanceOf[Int]-2, c.y.asInstanceOf[Int]-2,5,5)
          })
 
          g.setColor(Color.green)
-         val x = mPos.x - (mPos.x % 30)
-         val y = mPos.y - (mPos.y % 30)
-         g.fillOval(x.asInstanceOf[Int]-2, y.asInstanceOf[Int]-2, 5, 5)
+         shape2.points.foreach(c => {
+           g.fillOval(c.x.asInstanceOf[Int]-2, c.y.asInstanceOf[Int]-2,5,5)
+         })
        }
 
      }

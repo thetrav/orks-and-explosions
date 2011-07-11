@@ -1,12 +1,6 @@
 package oae
 
-
-
 object Main {
-
-
-
-
 
   def main(args:Array[String]) {
     Game.run
