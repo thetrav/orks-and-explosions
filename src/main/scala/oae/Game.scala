@@ -8,18 +8,20 @@ import physics._
 import collection.immutable.List
 
 object Game {
-  val width = 1000
+  val width = 900
   val height = 600
+  val gridSize = 30
 
   var gameRunning = true
   var drawPhysics = false
   var mousePos = Coord(0,0)
 
+
   var input = Map[Int, Long]()
 
   val camera = CenterCam
 
-  def go {
+  def run {
     val frame = new JFrame("orks and explosions")
     frame.setSize(width, height)
     frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE)
@@ -106,9 +108,11 @@ object Game {
 
           camera.transform(g)
 
+
           scene.draw(g)
           Player.draw(g)
           if(drawPhysics) Physics.draw(g)
+          drawGrid(g)
 
           camera.unTransform(g)
           Debug.draw(g)
@@ -121,6 +125,18 @@ object Game {
         System.exit(0)
       }
     }.start()
+  }
+
+  def drawGrid(g:Graphics) {
+    g.setColor(new Color(255,255,255, 100))
+    val x = Player.x - (Player.x % gridSize) - width/2
+    val y = Player.y - (Player.y % gridSize) - height/2
+    g.translate(x.asInstanceOf[Int], y.asInstanceOf[Int])
+    (1 to  (width/gridSize)).foreach(x => {
+      (1 to (height/gridSize)).foreach(y => {
+        g.fillOval(x*gridSize-1, y*gridSize-1, 3, 3)
+      })
+    })
   }
 
   def initProps = {

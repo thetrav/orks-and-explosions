@@ -8,7 +8,6 @@ case class Entity(id:Int, pos:Coord, size:Coord, accel:Coord = Coord(0,0), vel:C
     val newAccel = accel + gravity
     val newVel = (vel + newAccel) * friction
     val newPos = pos + newVel
-//    println("moving from "+pos+" to "+newPos)
     this.copy(pos = newPos, vel = newVel, accel = Coord(0,0))
   }
 

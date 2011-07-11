@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="managed_lib">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib_managed/scala_2.8.1/test/specs_2.8.1-1.6.6.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

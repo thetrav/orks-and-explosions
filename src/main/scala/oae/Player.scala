@@ -6,6 +6,8 @@ import java.awt.event.KeyEvent
 import java.awt.Color
 import java.awt.geom._
 
+import Game.gridSize
+
 object Player {
   var mousePos = Coord(0,0)
 
@@ -24,18 +26,17 @@ object Player {
   def pos = Physics.pos(id)
   def x = pos.x
   def y = pos.y
-  def size = animations(currentAnimation).size
-  def width = size.x
-  def height = size.y
+  def width = Physics.size(id).x
 
   def init() {
-    id = Physics.addEntity(Coord(0,0), size)
+    id = Physics.addEntity(Coord(30,80), animations(currentAnimation).size)
   }
 
   val runSpeed = 0.9
   val jumpPower = -30
   var jumpCounter = 0
   val jumpLimit = 60
+  var digDown = false
 
   def simulate(input:Map[Int, Long], mouseWorldPos:Coord) {
     if(input.contains(KeyEvent.VK_RIGHT)) {
@@ -57,39 +58,29 @@ object Player {
     }
     jumpCounter += 1
 
+    if(input.contains(KeyEvent.VK_D)) {
+      digDown = true
+    } else {
+      if (digDown) {
+        Physics.dig(digPoint)
+      }
+      digDown = false
+    }
+
     animations += currentAnimation -> animations(currentAnimation).update(math.abs(Physics.vel(id).x))
 
     mousePos = mouseWorldPos
-
-    if(input.contains(KeyEvent.VK_D)) {
-      Physics.dig(digShape)
-    }
   }
 
-  def digShape = {
-    val top = y+(height/2)
-    val bottom = y+50+(height/2)
-    val playerFoot = y + height
 
-    if(playerFacing == RIGHT) {
-      val left = x + width
-      val right = x + 100 + width
-      Shape(List(
-        Coord(left, top),
-        Coord(right, top),
-        Coord(right, bottom),
-        Coord(left, playerFoot)
-      ))
+  def digPoint = {
+    val dy = y + gridSize - (y % gridSize)
+    val dx = if(currentAnimation == "walk-right") {
+      x + width + gridSize - (x % gridSize)
     } else {
-      val left = x - 100
-      val right = x
-      Shape(List(
-        Coord(left, top),
-        Coord(right, top),
-        Coord(right, playerFoot),
-        Coord(left, bottom)
-      ))
+      x - gridSize - (x % gridSize)
     }
+    Coord(dx,dy)
   }
 
   def draw(g:Graphics2D) {
@@ -97,9 +88,11 @@ object Player {
     animations(currentAnimation).draw(g)
     g.translate(-x, -y)
 
-    Debug.out("heading:"+playerFacing)
-    g.setColor(new Color(255,0,0,100))
-    g.fill(digShape.shape)
+    g.setColor(Color.red)
+    val dp = digPoint
+    val ox = dp.x.asInstanceOf[Int] - 1
+    val oy = dp.y.asInstanceOf[Int] - 1
+    g.fillOval(ox, oy, 3, 3)
 
   }
 }
