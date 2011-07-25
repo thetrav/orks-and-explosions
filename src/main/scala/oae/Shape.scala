@@ -94,15 +94,14 @@ case class Shape(points:List[Coord]) {
         checkPoint(bottomRight, List[Coord](bottom, shoulders(3), right)),
         checkPoint(bottom, List[Coord](bottomLeft, shoulders(2), center, shoulders(3), bottomRight)),
         checkPoint(bottomLeft, List[Coord](left, shoulders(2), bottom)),
-        checkPoint(left, List[Coord](topLeft, shoulders(0), center, shoulders(2), bottomLeft)),
-        Some(center)
+        checkPoint(left, List[Coord](topLeft, shoulders(0), center, shoulders(2), bottomLeft))
       )
       printPoints(pointsList)
       pointsList.flatten
     }
 
     def checkPoint(c: Coord, neighbors: List[Coord]) = {
-      if(grid(c) && neighbors.exists(!grid(_))) {
+      if(neighbors.exists(!grid(_))) {
         Some(Coord(Math.round(c.x), Math.round(c.y)))
       } else {
         None

@@ -21,8 +21,10 @@ object DigBox {
 //     val area2 = new Area(new Rectangle2D.Double(70, 70, 100, 20))
 //     val merged = new Area(new Rectangle2D.Double(30,30,100,100))
 //     merged.add(area2)
-     val shape1 = Shape(List(Coord(600.0,0.0), Coord(600.0,300.0), Coord(390.0,300.0), Coord(360.0,330.0), Coord(330.0,300.0), Coord(0.0,300.0), Coord(0.0,0.0)))
-     val shape2 = Shape(List(Coord(420.0,300.0), Coord(390.0,330.0), Coord(360.0,330.0)))
+
+
+     val shape1 = Shape(List(Coord(600.0,0.0), Coord(600.0,210.0), Coord(660.0,210.0), Coord(660.0,240.0), Coord(690.0,240.0), Coord(690.0,210.0), Coord(720.0,240.0), Coord(720.0,270.0), Coord(720.0,300.0), Coord(0.0,300.0), Coord(0.0,0.0)))
+     val shape2 = Shape(List(Coord(690.0,210.0), Coord(720.0,240.0), Coord(720.0,270.0), Coord(660.0,240.0), Coord(690.0,240.0)))
 
 
      var shape = Shape(List(
