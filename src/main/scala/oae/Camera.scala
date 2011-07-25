@@ -1,6 +1,7 @@
 package oae
 
 import java.awt.Graphics2D
+import oae.geom.Coord
 
 trait Camera {
 

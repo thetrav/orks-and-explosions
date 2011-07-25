@@ -1,8 +1,10 @@
 package oae
 
 import physics._
-import java.awt._
-import java.awt.geom._
+import oae.geom._
+import java.awt.Graphics2D
+import java.awt.Color
+import java.awt.geom.Ellipse2D
 import scala.collection.immutable.List
 
 object Physics {
@@ -128,7 +130,7 @@ object Physics {
   def angleBetween(a:Segment, b:Segment) = {
     val aVector = a.vector
     val bVector = b.vector
-    if(aVector == Coord(0,0) || bVector == Coord(0,0)) { 0 } else {
+    if(aVector == Coord(0,0) || bVector == Coord(0,0)) { 0.0 } else {
       math.acos(aVector.dot(bVector) / (aVector.size * bVector.size()))
     }
   }

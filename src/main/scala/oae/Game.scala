@@ -6,6 +6,7 @@ import java.awt._
 import java.awt.event._
 import physics._
 import collection.immutable.List
+import oae.geom._
 
 object Game {
   val width = 900

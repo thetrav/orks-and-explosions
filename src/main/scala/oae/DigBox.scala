@@ -4,6 +4,8 @@ import javax.swing.{JPanel, JFrame}
 import java.awt.{Color, Graphics2D, Graphics}
 import java.awt.event.{MouseEvent, MouseAdapter}
 import java.awt.geom.{AffineTransform, PathIterator, Area, Rectangle2D}
+import oae.geom._
+
 
 object DigBox {
    def run {

@@ -1,7 +1,8 @@
-package oae
+package oae.geom
 
-import physics._
-import Game.gridSize
+import oae.physics._
+import oae.Game.gridSize
+import oae._
 import java.awt.geom._
 
 case class Shape(points:List[Coord]) {
@@ -208,7 +209,6 @@ case class Shape(points:List[Coord]) {
     def compare(a:Double, b:Double) = {
       Math.max(a,b) - Math.min(a,b) < EPSILON
     }
-//    println("isPointOnLine:"+point+" "+segment)
     val a = segment.a
     val b = segment.b
 

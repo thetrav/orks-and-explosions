@@ -4,6 +4,7 @@ import scala.collection.immutable.List
 import java.awt._
 import java.awt.geom._
 import physics._
+import oae.geom.Coord
 
 case class Scene(props:List[Prop]) {
 

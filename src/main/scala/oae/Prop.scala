@@ -2,6 +2,7 @@ package oae
 
 import java.awt.Graphics2D
 import java.awt.image.BufferedImage
+import oae.geom.Coord
 
 
 case class Prop(position:Coord, image:BufferedImage) {

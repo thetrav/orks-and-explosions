@@ -2,6 +2,7 @@ package oae
 
 import java.awt.image.BufferedImage
 import java.awt.Graphics2D
+import oae.geom.Coord
 
 case class Frame(image:BufferedImage, time:Int)
 

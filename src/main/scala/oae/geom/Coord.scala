@@ -1,4 +1,4 @@
-package oae
+package oae.geom
 
 case class Coord(x:Double, y:Double) {
   def + (o:Coord) = Coord(x + o.x, y + o.y)

@@ -1,6 +1,7 @@
 package oae.physics
 
 import oae._
+import oae.geom.Coord
 
 case class Entity(id:Int, pos:Coord, size:Coord, accel:Coord = Coord(0,0), vel:Coord = Coord(0,0), friction:Double = 0.85) {
   val gravity = Coord(0, 0.5)
