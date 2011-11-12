@@ -6,7 +6,7 @@ import math.Pi
 import org.specs.Specification
 
 class TestMotion extends Specification {
-
+         /*
   def difference(a:Double, b:Double) = {
     val dif = a - b
     if(dif == 0 ) 0.0 else math.sqrt(dif * dif)
@@ -86,5 +86,5 @@ class TestMotion extends Specification {
       }
       true must be equalTo(true)
     }
-  }
+  }   */
 }

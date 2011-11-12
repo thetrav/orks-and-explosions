@@ -1,11 +1,13 @@
 package oae
 
 
+import inventory.Item
 import java.awt.Graphics2D
 import java.awt.event.KeyEvent
 import java.awt.Color
 import java.awt.geom._
 import oae.geom._
+import collection.Map
 
 import Game.gridSize
 
@@ -38,6 +40,12 @@ object Player {
   var jumpCounter = 0
   val jumpLimit = 60
   var digDown = false
+  var digDirection:Direction = Middle
+  var inventory = Map("stone" -> 0)
+
+  def increaseInvCount(item:String) {
+    inventory += item -> (inventory(item) + 1)
+  }
 
   def simulate(input:Map[Int, Long], mouseWorldPos:Coord) {
     if(input.contains(KeyEvent.VK_RIGHT)) {
@@ -59,11 +67,22 @@ object Player {
     }
     jumpCounter += 1
 
+    if (input.contains(KeyEvent.VK_DOWN)) {
+      digDirection = Down
+    } else if (input.contains(KeyEvent.VK_UP)) {
+      digDirection = Up
+    } else {
+      digDirection = Middle
+    }
+
     if(input.contains(KeyEvent.VK_D)) {
       digDown = true
     } else {
       if (digDown) {
-        Physics.dig(digPoint)
+        Physics.dig(digPoint) match {
+          case Some(item) => increaseInvCount(item)
+          case None => ""
+        }
       }
       digDown = false
     }
@@ -73,9 +92,14 @@ object Player {
     mousePos = mouseWorldPos
   }
 
+  def yOffset = digDirection match {
+    case Up => -gridSize
+    case Down => gridSize
+    case _ => 0
+  }
 
   def digPoint = {
-    val dy = y + gridSize - (y % gridSize)
+    val dy = y + gridSize - (y % gridSize) + yOffset
     val dx = if(currentAnimation == "walk-right") {
       x + width + gridSize - (x % gridSize)
     } else {
@@ -94,6 +118,14 @@ object Player {
     val ox = dp.x.asInstanceOf[Int] - 1
     val oy = dp.y.asInstanceOf[Int] - 1
     g.fillOval(ox, oy, 3, 3)
+  }
 
+  def drawInventory(g:Graphics2D) {
+    inventory.map ((pair) => {
+      val img = Images.img("inventory/"+pair._1)
+      g.drawImage(img, null, 10, 10)
+      g.setColor(Color.white)
+      g.drawString("x "+pair._2, 45, 25)
+    })
   }
 }

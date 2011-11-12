@@ -5,7 +5,7 @@ import oae.physics._
 import org.specs.Specification
 
 class TestSlice extends Specification {
-  "SingleSlice" should {
+ /* "SingleSlice" should {
     "keep first segment of a slice going against the normal" in {
       val segment = Segment(Coord(1,-1), Coord(1, 1))
       val surface = Segment(Coord(0,0), Coord(3,0))
@@ -78,5 +78,5 @@ class TestSlice extends Specification {
 
 
     }
-  }
+  }  */
 }

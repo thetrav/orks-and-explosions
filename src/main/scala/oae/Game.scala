@@ -116,6 +116,9 @@ object Game {
           drawGrid(g)
 
           camera.unTransform(g)
+          g.setColor(Color.green)
+
+          Player.drawInventory(g)
           Debug.draw(g)
 
           g.dispose
