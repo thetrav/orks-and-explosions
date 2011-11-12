@@ -1,6 +1,7 @@
 package oae
 
 import java.awt.Graphics2D
+import java.awt.geom.AffineTransform
 
 trait Camera {
 
@@ -14,7 +15,8 @@ trait Camera {
   }
 
   def unTransform(g:Graphics2D) {
-    g.translate(x*1, y*1)
+    g.setTransform(new AffineTransform())
+//    g.translate(x*1, y*1)
   }
 }
 

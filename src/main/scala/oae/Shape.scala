@@ -151,9 +151,9 @@ case class Shape(points:List[Coord]) {
     val centerPoint = testPoints.find(tryChunk)
     println("foundPoint = "+centerPoint)
     centerPoint match {
-      case None => this
+      case None => (None,  this)
       case Some(c) => {
-        this.merge(buildChunk(c).applyDig.points)
+        (Some("stone"), this.merge(buildChunk(c).applyDig.points))
       }
     }
   }

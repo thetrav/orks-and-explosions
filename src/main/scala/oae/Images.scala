@@ -8,7 +8,18 @@ import scala.collection.immutable.List
 
 
 object Images {
-  def img(img:String) = ImageIO.read(getClass().getResourceAsStream(img+".png"))
+
+  var imageCache:Map[String, BufferedImage] = Map()
+
+  def img(img:String) = {
+    if (imageCache.contains(img)) {
+      imageCache(img)
+    } else {
+      val image = ImageIO.read(getClass().getResourceAsStream(img+".png"))
+      imageCache = imageCache + (img -> image)
+      image
+    }
+  }
 
   def tile(image:String) = img(("tiles/"+image))
   def decal(image:String) = img(("decals/"+image))

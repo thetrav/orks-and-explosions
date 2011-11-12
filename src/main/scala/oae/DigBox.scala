@@ -63,7 +63,7 @@ object DigBox {
      frame.getContentPane.add(panel)
 
      def dig {
-       shape = shape.dig(mPos)
+       shape = shape.dig(mPos)._2
      }
 
      def repaint {

@@ -174,7 +174,9 @@ object Physics {
     })
   }
 
-  def dig(digPoint:Coord) {
-    world = world.dig(digPoint)
+  def dig(digPoint:Coord) = {
+    val result = world.dig(digPoint)
+    world = result._2
+    result._1
   }
 }
