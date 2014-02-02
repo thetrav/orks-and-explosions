@@ -46,7 +46,7 @@ object Animator {
     val controls = new JPanel
     main.add(controls, BorderLayout.NORTH)
     controls.add(new JLabel("Frame:"))
-    val frameSelect = new JComboBox()
+    val frameSelect = new JComboBox[Any]()
     controls.add(frameSelect)
     controls.add(new JLabel("Time:"))
     val frameTime = new JTextField(5)
@@ -183,7 +183,7 @@ object Animator {
     }
 
     val removeFrame = () => {
-      frames = frames - frames(currentFrame)
+      frames = frames.filter(_ == frames(currentFrame))
       if(currentFrame > 0) {
         currentFrame -= 1
       } else {

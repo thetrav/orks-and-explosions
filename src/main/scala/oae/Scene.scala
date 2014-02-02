@@ -37,5 +37,5 @@ case class Scene(props:List[Prop]) {
   }
 
   def +(prop:Prop) = Scene(prop :: props )
-  def -(prop:Prop) = Scene(props - prop)
+  def -(prop:Prop) = Scene(props.filter(_ == prop))
 }
